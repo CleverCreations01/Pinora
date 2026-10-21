@@ -2,7 +2,7 @@ workflows:
   pinvora-android:
     name: PINVORA Android APK
     max_build_duration: 60
-    instance_type: linux_x2
+    instance_type: mac_mini_m2
     environment:
       node: 22
       java: 21
@@ -19,8 +19,7 @@ workflows:
         script: echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
       - name: Apply PINVORA launcher icon
         script: |
-          sudo apt-get update
-          sudo apt-get install -y librsvg2-bin
+          brew list librsvg >/dev/null 2>&1 || brew install librsvg
           for entry in "mdpi 48" "hdpi 72" "xhdpi 96" "xxhdpi 144" "xxxhdpi 192"; do
             set -- $entry
             density="$1"
