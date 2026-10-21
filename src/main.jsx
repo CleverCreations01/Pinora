@@ -26,7 +26,7 @@ const concepts = [
 
 function makePins(prompt){
   return concepts.map((c,i)=>({
-    ...c,id:Date.now()+i,prompt:prompt.trim(),imageStatus:"not-generated",
+    ...c,id:Date.now()+i,prompt:prompt.trim(),imageStatus:"not-generated",imageUrl:"",imageName:"",pinType:"affiliate",
     products:baseProducts,
     seoTitle:c.title+" | Cozy Home Decor Ideas",
     description:"Create a warm, layered home look with burgundy, cream and natural textures. Shop the individual pieces and recreate this cozy editorial aesthetic.",
@@ -43,6 +43,15 @@ function App(){
  function toggle(id){setSelected(s=>({...s,[id]:!s[id]}))}
  function toggleOpen(id){setOpen(s=>({...s,[id]:!s[id]}))}
  function requestImage(id){setPins(ps=>ps.map(p=>p.id===id?{...p,imageStatus:"queued"}:p))}
+ function uploadImage(id,file){
+  if(!file)return;
+  if(!file.type.startsWith("image/")){setStatus("Please choose an image file.");return;}
+  if(file.size>8*1024*1024){setStatus("Choose an image under 8 MB.");return;}
+  const reader=new FileReader();
+  reader.onload=()=>setPins(ps=>ps.map(p=>p.id===id?{...p,imageUrl:String(reader.result),imageName:file.name,imageStatus:"uploaded"}:p));
+  reader.onerror=()=>setStatus("Image could not be read. Please try another file.");
+  reader.readAsDataURL(file);
+ }
  const chosen=pins.filter(p=>selected[p.id]);
  return <div className="app">
   <header><div><div className="logo">PIN<span>ORA</span></div><div className="sub">Pinterest affiliate campaign engine</div></div><div className="pill">● HUMAN APPROVAL REQUIRED</div></header>
@@ -51,7 +60,10 @@ function App(){
    <nav><button className={tab==="generate"?"active":""} onClick={()=>setTab("generate")}>01 Generate</button><button className={tab==="review"?"active":""} onClick={()=>setTab("review")} disabled={!pins.length}>02 Review ({pins.length})</button><button className={tab==="queue"?"active":""} onClick={()=>setTab("queue")} disabled={!pins.length}>03 Schedule</button></nav>
    {tab==="generate"&&<section className="card generator"><label>PASTE TODAY'S MASTER PROMPT</label><textarea value={prompt} onChange={e=>setPrompt(e.target.value)} placeholder="Paste the exact master prompt generated for you here..."/><div className="checks"><span>✓ Highest-potential concepts</span><span>✓ SEO title + description</span><span>✓ 5–6 product candidates</span><span>✓ Affiliate disclosure</span><span>✓ Board + posting time</span><span>✓ Human review first</span></div><button className="primary" onClick={generate}>GENERATE 10-PIN CAMPAIGN →</button></section>}
    {tab==="review"&&<section><div className="notice"><b>Campaign review.</b> Each Pin can contain multiple products. Images are not being faked as finished assets; the connected AI image step will replace this state.</div><div className="grid">{pins.map((p,i)=><article className={"pin "+(!selected[p.id]?"off":"")} key={p.id}>
-    <div className="visual"><div className="imageState"><span className="imageBadge">2:3 PIN</span>{p.imageStatus==="queued"?<><strong>IMAGE QUEUED</strong><small>Ready for the AI image generation connector.</small></>:<><strong>AI IMAGE</strong><small>Not generated yet</small><button className="imageBtn" onClick={()=>requestImage(p.id)}>GENERATE IMAGE</button></>}</div></div>
+    <div className="visual">
+    {p.imageUrl?<div className="uploadedPreview"><img src={p.imageUrl} alt={p.alt}/><div className="uploadedLabel">✓ IMAGE ADDED · {p.imageName}</div></div>:<div className="imageState"><span className="imageBadge">2:3 PIN</span><strong>{p.imageStatus==="queued"?"IMAGE QUEUED":"ADD YOUR IMAGE"}</strong><small>{p.imageStatus==="queued"?"Automatic AI generation is not connected. Upload a ChatGPT image instead.":"Choose an image you generated in ChatGPT and saved to your phone."}</small></div>}
+    <label className="uploadBtn">{p.imageUrl?"REPLACE IMAGE":"UPLOAD CHATGPT IMAGE"}<input type="file" accept="image/*" onChange={e=>{uploadImage(p.id,e.target.files?.[0]);e.target.value=""}}/></label>
+   </div>
     <div className="pinbody"><div className="row"><b>PIN #{i+1}</b><label className="switch"><input type="checkbox" checked={!!selected[p.id]} onChange={()=>toggle(p.id)}/><i/></label></div><h2>{p.title}</h2><div className="meta"><span>📌 {p.board}</span><span>🕐 {p.time}</span><span>⚡ {p.score}/100</span></div>
     <div className="field"><b>HIGHEST-PRIORITY SEO TITLE</b><p>{p.seoTitle}</p></div><div className="field"><b>PINTEREST DESCRIPTION</b><p>{p.description}</p></div>
     <div className="field"><div className="fieldHead"><b>PRODUCTS TO TAG · {p.products.length}</b><span>Amazon US</span></div><div className="products">{p.products.map((prod,j)=><div className="product" key={j}><span><strong>{j+1}.</strong> {prod[0]}</span><code>{prod[1]}</code></div>)}</div></div>
