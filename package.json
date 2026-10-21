@@ -1,8 +1,22 @@
 {
-  "name":"pinora",
-  "private":true,
-  "version":"0.1.0",
-  "type":"module",
-  "scripts":{"dev":"vite","build":"vite build","preview":"vite preview"},
-  "dependencies":{"vite":"latest","react":"latest","react-dom":"latest"}
+  "name": "pinvora",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "android:sync": "npm run build && cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/core": "^7.4.3",
+    "vite": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.3"
+  }
 }
