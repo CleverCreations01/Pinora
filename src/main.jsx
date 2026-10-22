@@ -12,24 +12,24 @@ const baseProducts = [
 ];
 
 const concepts = [
-  {title:"Burgundy & Cream Cozy Bedroom",trend:"Burgundy + cream",board:"Cozy Bedroom Ideas",time:"7:15 PM EST",score:94},
-  {title:"Hobo-Inspired Layered Corner",trend:"Hobo / eclectic",board:"Cozy Home Inspiration",time:"8:05 PM EST",score:92},
-  {title:"Warm Editorial Reading Nook",trend:"Warm minimalism",board:"Reading Nook Ideas",time:"6:45 PM EST",score:91},
-  {title:"Burgundy Accent Living Room",trend:"Burgundy accents",board:"Living Room Inspiration",time:"8:20 PM EST",score:90},
-  {title:"Collected Neutral Bedroom",trend:"Collected neutrals",board:"Bedroom Inspiration",time:"7:40 PM EST",score:89},
-  {title:"Vintage-Modern Cozy Home",trend:"Vintage modern",board:"Home Decor Ideas",time:"6:55 PM EST",score:88},
-  {title:"Cream, Wood & Burgundy Styling",trend:"Earthy contrast",board:"Home Styling Ideas",time:"8:35 PM EST",score:87},
-  {title:"Layered Texture Bedroom",trend:"Layered textures",board:"Cozy Bedroom Ideas",time:"7:05 PM EST",score:86},
-  {title:"Moody Cozy Apartment Corner",trend:"Moody cozy",board:"Apartment Decor",time:"9:00 PM EST",score:85},
-  {title:"Small Space Luxury on a Budget",trend:"Affordable luxury",board:"Small Space Decor",time:"8:50 PM EST",score:84}
+  {title:"The Burgundy Bedroom Trick That Makes Cream Feel Luxe",trend:"Burgundy + cream",board:"Cozy Bedroom Ideas",time:"7:15 PM EST",score:94,description:"Want a bedroom that feels rich and restful without looking dark? The secret is balancing deep burgundy with soft cream, touchable fabrics and warm lighting. Save this palette for your next bedroom refresh, then explore the pieces that help bring the look together. #BedroomIdeas #BurgundyDecor #CozyBedroom #HomeDecorInspo #WarmNeutrals"},
+  {title:"Make Your Cozy Corner Look Collected, Not Cluttered",trend:"Boho / eclectic",board:"Cozy Home Inspiration",time:"8:05 PM EST",score:92,description:"The coziest corners rarely look like they came straight from one store. Mix a tactile throw, a warm lamp, natural textures and one vintage-inspired accent for a space that feels personal. Save this idea for your next slow Sunday styling session. #CozyHome #EclecticDecor #HomeStyling #InteriorInspiration #SmallSpaceDecor"},
+  {title:"A Reading Nook You’ll Want to Disappear Into",trend:"Warm minimalism",board:"Reading Nook Ideas",time:"6:45 PM EST",score:91,description:"Imagine closing the door on a busy day and sinking into this warm little reading nook. Soft neutrals, layered lighting and a few thoughtful textures can make even an unused corner feel intentional. Save this setup for your dream-home board. #ReadingNook #CozyCorners #WarmMinimalism #HomeInspiration #InteriorStyling"},
+  {title:"Steal This Burgundy Accent Idea for a Warmer Living Room",trend:"Burgundy accents",board:"Living Room Inspiration",time:"8:20 PM EST",score:90,description:"If your living room feels a little flat, try one deep burgundy accent against creamy upholstery and natural wood. It adds depth without taking over the whole room. Pin this color combination now so you have it ready when you restyle. #LivingRoomDecor #BurgundyAccents #CozyLivingRoom #NeutralHome #DecorIdeas"},
+  {title:"The Neutral Bedroom Formula That Never Feels Boring",trend:"Collected neutrals",board:"Bedroom Inspiration",time:"7:40 PM EST",score:89,description:"Neutral doesn’t have to mean plain. The trick is layering different textures—linen, boucle, woven details and warm wood—so the room feels calm but still full of character. Save this formula for a bedroom that feels thoughtfully finished. #NeutralBedroom #BedroomDecor #LayeredTextures #CozyHome #InteriorIdeas"},
+  {title:"How to Mix Vintage Charm With a Clean Modern Home",trend:"Vintage modern",board:"Home Decor Ideas",time:"6:55 PM EST",score:88,description:"Love modern spaces but wish they felt less showroom-perfect? Add one vintage-inspired shape, warm lighting and natural materials to make the room feel collected over time. Save this blend of old-soul character and modern simplicity. #VintageModern #HomeDecorIdeas #CollectedHome #InteriorDesignInspo #WarmInteriors"},
+  {title:"Burgundy, Cream and Wood: The Color Mix That Just Works",trend:"Earthy contrast",board:"Home Styling Ideas",time:"8:35 PM EST",score:87,description:"This palette works because every shade has a job: burgundy brings depth, cream keeps things light, and wood adds warmth. Use it in a bedroom, living room or reading corner for a cohesive look that still feels inviting. Save it before your next decor refresh. #ColorPalette #BurgundyDecor #CreamAesthetic #WoodAccents #HomeStyling"},
+  {title:"The Layering Secret Behind a Pinterest-Worthy Bedroom",trend:"Layered textures",board:"Cozy Bedroom Ideas",time:"7:05 PM EST",score:86,description:"The difference between a basic bedroom and a beautifully layered one is often texture, not more stuff. Combine soft bedding, a tactile throw, natural fibers and gentle lighting for depth that looks effortless. Save this checklist for your next room reset. #BedroomInspo #CozyBedroom #LayeredBedding #TexturedDecor #PinterestHome"},
+  {title:"Turn One Awkward Apartment Corner Into Your Favourite Spot",trend:"Moody cozy",board:"Apartment Decor",time:"9:00 PM EST",score:85,description:"That empty corner might be the most useful space in your apartment. Add a small lamp, a comfortable texture and one practical accent to create a cosy spot without crowding the room. Save this idea if you’re decorating a rental or small home. #ApartmentDecor #SmallSpaceLiving #CozyCorner #RentalFriendly #HomeIdeas"},
+  {title:"Make a Small Room Feel Expensive Without Buying Everything",trend:"Affordable luxury",board:"Small Space Decor",time:"8:50 PM EST",score:84,description:"A polished room is more about a few deliberate choices than filling every corner. Repeat two or three colours, add varied textures and choose warm lighting to make a small space feel considered. Save these ideas before spending on your next home update. #AffordableDecor #SmallSpaceDecor #BudgetHomeDecor #CozyInteriors #HomeMakeover"}
 ];
 
 function makePins(prompt){
   return concepts.map((c,i)=>({
     ...c,id:Date.now()+i,prompt:prompt.trim(),imageStatus:"not-generated",imageUrl:"",imageName:"",pinType:"affiliate",
     products:baseProducts,
-    seoTitle:c.title+" | Cozy Home Decor Ideas",
-    description:"Create a warm, layered home look with burgundy, cream and natural textures. Shop the individual pieces and recreate this cozy editorial aesthetic.",
+    seoTitle:c.title.length>95?c.title.slice(0,92).trim()+"…":c.title,
+    description:c.description+" (paid links) As an Amazon Associate I earn from qualifying purchases.",
     alt:"Burgundy and cream cozy home interior with layered textures and warm lighting",
     keywords:"burgundy home decor, cream home decor, cozy bedroom, cozy living room, warm neutral decor, eclectic home decor, affordable home decor",
     disclosure:"As an Amazon Associate I earn from qualifying purchases."
