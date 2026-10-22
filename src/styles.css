@@ -61,3 +61,91 @@ main{padding-top:24px}
   .quickActions b{font-size:11px}
   .quickActions small{font-size:8px}
 }
+
+
+/* Editorial torn-paper art direction — real app UI, not a mockup */
+:root{
+  --wine:#7b293b;
+  --wine2:#914456;
+  --cream:#f5ecdf;
+  --paper:#fff9ef;
+  --ink:#40272a;
+  --muted:#7c6a60;
+}
+html,body,#root,.app{min-height:100%;margin:0}
+body,.app{
+  background-color:#f5ecdf;
+  background-image:
+    radial-gradient(ellipse at 20% 10%,rgba(255,252,244,.7),transparent 55%),
+    repeating-linear-gradient(0deg,rgba(101,70,48,.022) 0px,rgba(101,70,48,.022) 1px,transparent 1px,transparent 5px);
+  font-family: "Trebuchet MS",Arial,sans-serif;
+}
+header{
+  position:relative;
+  z-index:2;
+  height:auto;
+  min-height:0;
+  padding:calc(env(safe-area-inset-top, 0px) + 12px) 18px 25px;
+  background:#7b293b;
+  border:0;
+  box-shadow:none;
+  overflow:visible;
+}
+header:after{
+  content:"";
+  position:absolute;
+  left:-1%;right:-1%;bottom:-10px;height:19px;
+  background:#f5ecdf;
+  opacity:1;
+  clip-path:polygon(0 42%,4% 54%,8% 40%,12% 57%,17% 44%,22% 61%,27% 39%,32% 55%,38% 43%,43% 59%,49% 40%,55% 55%,61% 42%,67% 60%,72% 43%,78% 56%,83% 38%,88% 57%,94% 41%,100% 53%,100% 100%,0 100%);
+}
+.brandlock{gap:12px}
+.brandlock img{width:52px;height:52px;flex-basis:52px;border-radius:17px;border:1px solid rgba(255,244,230,.55);box-shadow:0 2px 0 rgba(50,18,26,.15)}
+.logo{font-family:Georgia,"Times New Roman",serif;font-size:clamp(24px,6vw,31px);font-weight:700;letter-spacing:.025em;color:#fff7ec}
+.sub{font-family:Georgia,"Times New Roman",serif;font-size:13px;color:#f0dcd3}
+.pill{font-size:0;border:0;background:transparent;padding:0;min-width:0}
+.pill .statusDot{display:none}
+main{padding-top:25px}
+.hero h1{font-family:Georgia,"Times New Roman",serif;font-weight:700;color:#7b293b;letter-spacing:-.045em;line-height:.98}
+.hero em{font-weight:700;color:#914456}
+.eyebrow{font-family:Arial,sans-serif;font-size:11px;letter-spacing:.17em;font-weight:700;color:#884051}
+.hero .muted{font-family:Georgia,"Times New Roman",serif;color:#7c6a60}
+.heroNote{font-family:Georgia,"Times New Roman",serif;font-style:italic;color:#914456}
+.stat,.quickActions button,.card,.pin{background:rgba(255,249,239,.86);border-color:#e0cdb9;box-shadow:0 2px 0 rgba(90,48,39,.045);backdrop-filter:none}
+.stat{border-radius:48% 30% 8px 8px / 12% 14% 8px 8px}
+.quickActions button{border-radius:20px 20px 8px 20px}
+.quickActions button>span{color:#914456}
+.quickActions b{font-family:Georgia,"Times New Roman",serif;font-weight:700;color:#57353a}
+.generator{border-radius:24px 24px 9px 24px}
+.generator label{font-family:Arial,sans-serif;font-weight:700;letter-spacing:.13em}
+.generator textarea{border-radius:20px 20px 10px 20px;background:#fff9ef;border-color:#e0cdb9;font-family:Georgia,"Times New Roman",serif}
+.primary{background:#7b293b;box-shadow:0 3px 0 #5f1d2d;border-radius:13px 13px 7px 13px}
+nav{border-color:#ddc9b7}
+nav button{font-family:Georgia,"Times New Roman",serif}
+@media(max-width:750px){
+ header{padding:calc(env(safe-area-inset-top, 0px) + 10px) 15px 24px;min-height:0;height:auto;gap:8px}
+ .brandlock img{width:48px;height:48px;flex-basis:48px}
+ .logo{font-size:clamp(23px,6.4vw,29px);line-height:1}
+ .sub{font-size:11px}
+ main{padding:22px 15px 110px}
+ .hero{grid-template-columns:minmax(0,1fr) 82px;gap:9px;margin-bottom:18px}
+ .hero h1{font-size:clamp(31px,8.8vw,38px);line-height:.99;overflow-wrap:normal}
+ .hero .muted{font-size:11px;line-height:1.42}
+ .heroNote::after{font-size:10px}
+ .stat{padding:10px 7px}
+ .statLabel{font-size:7px;letter-spacing:.07em;line-height:1.35}
+ .stat b{font-size:30px}
+ .quickActions{gap:7px;margin-bottom:19px}
+ .quickActions button{padding:11px 8px;min-height:105px}
+ .quickActions b{font-size:11px;line-height:1.2}
+ .quickActions small{font-size:8px}
+ .generator{padding:17px}
+ .generator textarea{height:115px;min-height:110px}
+}
+@media(max-width:370px){
+ .brandlock img{width:42px;height:42px;flex-basis:42px}
+ .logo{font-size:22px}
+ .sub{font-size:10px}
+ .hero{grid-template-columns:minmax(0,1fr) 72px}
+ .hero h1{font-size:30px}
+}
