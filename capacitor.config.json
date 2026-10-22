@@ -3,6 +3,8 @@
   "appName": "PINVORA",
   "webDir": "dist",
   "server": {
+    "url": "https://pinora-six.vercel.app",
+    "cleartext": false,
     "androidScheme": "https"
   }
 }
