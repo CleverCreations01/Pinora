@@ -9,12 +9,18 @@ workflows:
     scripts:
       - name: Install dependencies
         script: npm install
+      - name: Verify remote website configuration
+        script: |
+          node -e "const c=require('./capacitor.config.json'); if(c.server?.url !== 'https://pinora-six.vercel.app') { console.error('PINVORA must load the stable production website URL'); process.exit(1); } console.log('Remote website:', c.server.url)"
       - name: Build the web app
         script: npm run build
       - name: Create Android project
         script: npx cap add android
       - name: Sync Capacitor
         script: npx cap sync android
+      - name: Verify remote URL was copied into Android app
+        script: |
+          node -e "const fs=require('fs'); const p='android/app/src/main/assets/capacitor.config.json'; if(!fs.existsSync(p)) { console.error('Capacitor config was not generated'); process.exit(1); } const c=JSON.parse(fs.readFileSync(p,'utf8')); if(c.server?.url !== 'https://pinora-six.vercel.app') { console.error('Android build is not configured to load the live PINVORA website'); process.exit(1); } console.log('Android app will load:', c.server.url)"
       - name: Set Android SDK location
         script: echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
       - name: Apply PINVORA launcher icon
@@ -35,5 +41,7 @@ workflows:
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
+          test -s app/build/outputs/apk/debug/app-debug.apk
+          echo "APK artifact verified"
     artifacts:
       - android/app/build/outputs/apk/debug/app-debug.apk
