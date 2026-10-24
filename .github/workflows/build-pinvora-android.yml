@@ -1,0 +1,106 @@
+name: Build PINVORA Android APK
+
+on:
+  push:
+    branches:
+      - pinvora-reference-redesign
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Get project files
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install Android build tools
+        uses: android-actions/setup-android@v3
+
+      - name: Install app packages
+        run: npm install
+
+      - name: Build website files
+        run: npm run build
+
+      - name: Create Android project
+        run: npx cap add android
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Configure RASI-style live website
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP_DIR="android/app/src/main/java/com/clevercreations/pinvora"
+          mkdir -p "$APP_DIR"
+          cat > "$APP_DIR/MainActivity.java" <<'JAVA'
+          package com.clevercreations.pinvora;
+
+          import android.app.Activity;
+          import android.os.Bundle;
+          import android.webkit.WebSettings;
+          import android.webkit.WebView;
+          import android.webkit.WebViewClient;
+
+          public class MainActivity extends Activity {
+              private WebView webView;
+
+              @Override
+              public void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+                  webView = new WebView(this);
+                  setContentView(webView);
+                  WebSettings settings = webView.getSettings();
+                  settings.setJavaScriptEnabled(true);
+                  settings.setDomStorageEnabled(true);
+                  settings.setDatabaseEnabled(true);
+                  settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+                  settings.setMediaPlaybackRequiresUserGesture(false);
+                  webView.setWebViewClient(new WebViewClient());
+                  webView.loadUrl("https://pinora-six.vercel.app/?pinvoraapp=1");
+              }
+
+              @Override
+              public void onBackPressed() {
+                  if (webView != null && webView.canGoBack()) {
+                      webView.goBack();
+                  } else {
+                      super.onBackPressed();
+                  }
+              }
+          }
+          JAVA
+          grep -q 'android.permission.INTERNET' android/app/src/main/AndroidManifest.xml
+          grep -q 'https://pinora-six.vercel.app/?pinvoraapp=1' "$APP_DIR/MainActivity.java"
+
+      - name: Build installable APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+          test -s app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Save APK for download
+        uses: actions/upload-artifact@v4
+        with:
+          name: pinvora-live-update-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
