@@ -18,6 +18,51 @@ workflows:
         script: npx cap add android
       - name: Sync Capacitor
         script: npx cap sync android
+      - name: Configure RASI-style live website app
+        script: |
+          set -eu
+          APP_DIR="android/app/src/main/java/com/clevercreations/pinvora"
+          mkdir -p "$APP_DIR"
+          cat > "$APP_DIR/MainActivity.java" <<'JAVA'
+          package com.clevercreations.pinvora;
+
+          import android.app.Activity;
+          import android.os.Bundle;
+          import android.webkit.WebSettings;
+          import android.webkit.WebView;
+          import android.webkit.WebViewClient;
+
+          public class MainActivity extends Activity {
+              private WebView webView;
+
+              @Override
+              public void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+                  webView = new WebView(this);
+                  setContentView(webView);
+                  WebSettings settings = webView.getSettings();
+                  settings.setJavaScriptEnabled(true);
+                  settings.setDomStorageEnabled(true);
+                  settings.setDatabaseEnabled(true);
+                  settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+                  settings.setMediaPlaybackRequiresUserGesture(false);
+                  webView.setWebViewClient(new WebViewClient());
+                  webView.loadUrl("https://pinora-six.vercel.app/?pinvoraapp=1");
+              }
+
+              @Override
+              public void onBackPressed() {
+                  if (webView != null && webView.canGoBack()) {
+                      webView.goBack();
+                  } else {
+                      super.onBackPressed();
+                  }
+              }
+          }
+          JAVA
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          grep -q 'android.permission.INTERNET' "$MANIFEST" || sed -i '' 's#<manifest#<manifest\n    <uses-permission android:name="android.permission.INTERNET" />#' "$MANIFEST"
+          grep -q 'android.permission.INTERNET' "$MANIFEST"
       - name: Verify remote URL was copied into Android app
         script: |
           node -e "const fs=require('fs'); const p='android/app/src/main/assets/capacitor.config.json'; if(!fs.existsSync(p)) { console.error('Capacitor config was not generated'); process.exit(1); } const c=JSON.parse(fs.readFileSync(p,'utf8')); if(c.server?.url !== 'https://pinora-six.vercel.app') { console.error('Android build is not configured to load the live PINVORA website'); process.exit(1); } console.log('Android app will load:', c.server.url)"
