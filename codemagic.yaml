@@ -60,18 +60,7 @@ workflows:
               }
           }
           JAVA
-          MANIFEST="android/app/src/main/AndroidManifest.xml"
-          python3 - <<'PY'
-          from pathlib import Path
-          path = Path("android/app/src/main/AndroidManifest.xml")
-          text = path.read_text()
-          permission = '<uses-permission android:name="android.permission.INTERNET" />'
-          if permission not in text:
-              text = text.replace("<manifest", "<manifest\\n    " + permission, 1)
-              path.write_text(text)
-          if permission not in path.read_text():
-              raise SystemExit("Internet permission missing from Android manifest")
-          PY
+          grep -q 'android.permission.INTERNET' android/app/src/main/AndroidManifest.xml
       - name: Verify live website app configuration
         script: |
           grep -q 'https://pinora-six.vercel.app/?pinvoraapp=1' android/app/src/main/java/com/clevercreations/pinvora/MainActivity.java
