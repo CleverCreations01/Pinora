@@ -61,11 +61,22 @@ workflows:
           }
           JAVA
           MANIFEST="android/app/src/main/AndroidManifest.xml"
-          grep -q 'android.permission.INTERNET' "$MANIFEST" || sed -i '' 's#<manifest#<manifest\n    <uses-permission android:name="android.permission.INTERNET" />#' "$MANIFEST"
-          grep -q 'android.permission.INTERNET' "$MANIFEST"
-      - name: Verify remote URL was copied into Android app
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path("android/app/src/main/AndroidManifest.xml")
+          text = path.read_text()
+          permission = '<uses-permission android:name="android.permission.INTERNET" />'
+          if permission not in text:
+              text = text.replace("<manifest", "<manifest\\n    " + permission, 1)
+              path.write_text(text)
+          if permission not in path.read_text():
+              raise SystemExit("Internet permission missing from Android manifest")
+          PY
+      - name: Verify live website app configuration
         script: |
-          node -e "const fs=require('fs'); const p='android/app/src/main/assets/capacitor.config.json'; if(!fs.existsSync(p)) { console.error('Capacitor config was not generated'); process.exit(1); } const c=JSON.parse(fs.readFileSync(p,'utf8')); if(c.server?.url !== 'https://pinora-six.vercel.app') { console.error('Android build is not configured to load the live PINVORA website'); process.exit(1); } console.log('Android app will load:', c.server.url)"
+          grep -q 'https://pinora-six.vercel.app/?pinvoraapp=1' android/app/src/main/java/com/clevercreations/pinvora/MainActivity.java
+          grep -q 'android.permission.INTERNET' android/app/src/main/AndroidManifest.xml
+          echo "Live website URL and internet permission verified"
       - name: Set Android SDK location
         script: echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
       - name: Apply PINVORA launcher icon
