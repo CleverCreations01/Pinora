@@ -64,7 +64,7 @@ function App(){
    {tab==="home"&&<section className="homeScreen">
     <div className="greeting"><div className="greetingPaper"><h1>Hi Rasika <span>♡</span></h1></div><p>Ready to create something beautiful today?</p></div>
     <section className="featurePaper"><div className="featurePhoto"><div className="photoArt" role="img" aria-label="Burgundy flowers in a ceramic vase"/><i>taped memory</i></div><div className="featureCopy"><h2>Create Pins</h2><p>Turn your ideas into<br/>scroll-stopping pins</p><button className="creamBtn" onClick={goCreate}>Generate Now <span>→</span></button></div><span className="tape tapeA"/><span className="tape tapeB"/></section>
-    <div className="homeTiles"><button onClick={()=>window.open("https://trends.pinterest.com/","_blank","noopener,noreferrer")}><span>⌕</span><b>Research</b><i/></button><button onClick={()=>setTab("schedule")}><span>▦</span><b>Schedule</b><i/></button><button onClick={()=>setTab("analytics")}><span>▥</span><b>Analytics</b><i/></button></div>
+    <div className="homeTiles"><button onClick={()=>setTab("review")}><span>▤</span><b>Your Pins</b><i/></button><button onClick={()=>setTab("schedule")}><span>▦</span><b>Schedule</b><i/></button><button onClick={()=>setTab("saved")}><span>◇</span><b>Saved</b><i/></button></div>
 
     {pins.length>0&&<button className="resumeBtn" onClick={()=>setTab("review")}>Continue your campaign · {pins.length} pins →</button>}
    </section>}
