@@ -1,19 +1,19 @@
-@import url("https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Allura&family=Lora:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap");
 :root{--wine:#641d29;--wine2:#742633;--wineDark:#4b1720;--cream:#f4eadc;--paper:#fbf3e8;--paper2:#efe1d0;--ink:#492b27;--muted:#80665a;--line:#dfcbb7;--sage:#a58a61}
 *{box-sizing:border-box}
 html,body,#root{min-height:100%;margin:0}
-body{background:#f2e6d8;color:var(--ink);font-family:"Cormorant Garamond",Georgia,serif}
+body{background:#f2e6d8;color:var(--ink);font-family:"Lora",Georgia,serif}
 button,input,textarea{font:inherit}
 button{cursor:pointer}
 .app{min-height:100vh;background-color:var(--cream);background-image:radial-gradient(rgba(105,67,49,.035) .55px,transparent .7px);background-size:5px 5px;padding-bottom:88px}
 .topbar{height:118px;position:relative;z-index:2;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px clamp(22px,6vw,90px) 25px;background-color:var(--wineDark);color:var(--paper)}
 .topbar:after{content:"";position:absolute;z-index:1;left:-1%;right:-1%;bottom:-19px;height:35px;background:var(--cream);clip-path:polygon(0 37%,3% 48%,7% 33%,11% 59%,15% 42%,19% 64%,23% 43%,27% 60%,32% 35%,36% 59%,41% 41%,46% 64%,51% 38%,56% 59%,61% 39%,66% 61%,71% 36%,76% 59%,81% 39%,86% 62%,91% 39%,96% 55%,100% 38%,100% 100%,0 100%)}
 .menuBtn,.topActions button{border:0;background:transparent;color:var(--paper);font-size:30px}
-.menuBtn{justify-self:start;font-family:Arial,sans-serif;font-size:27px;font-weight:300}
+.menuBtn{justify-self:start;display:flex;align-items:center;gap:8px;font-family:"DM Sans",Arial,sans-serif;font-size:16px;font-weight:600}.menuBtn span{font-size:14px}
 .brand{text-align:center;align-self:center}
 .brandName{font-family:"Allura","Segoe Script",cursive;font-size:clamp(42px,5vw,56px);font-style:normal;line-height:1;color:#fff4e7;letter-spacing:0}
 .brandName span{font-family:Georgia,serif;font-size:.8em}
-.brandTag{margin-top:7px;color:#f1dccc;font-size:17px;letter-spacing:.16em}
+.brandTag{margin-top:7px;color:#f1dccc;font-family:"DM Sans",Arial,sans-serif;font-size:12px;letter-spacing:.12em}
 .topActions{justify-self:end;display:flex;align-items:center;gap:28px}
 .topActions button{font-size:27px}
 .bow{display:grid;place-items:center;width:72px;height:72px;border-radius:50%;background:#e9d8c4;font-size:34px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6)}
@@ -23,7 +23,7 @@ main{width:min(1100px,100% - 44px);margin:0 auto;padding:43px 0 38px}
 .greetingPaper{position:relative;display:inline-block;padding:4px 32px 9px 27px;transform:rotate(-1.5deg);background:linear-gradient(170deg,#f9eee0,#ead9c5);clip-path:polygon(2% 9%,96% 0,100% 85%,6% 100%,0 77%)}
 .greeting h1{margin:0;color:var(--wineDark);font-family:"Allura","Segoe Script",cursive;font-size:clamp(40px,4.6vw,51px);font-weight:400}
 .greeting h1 span{font-family:Georgia,serif;color:var(--wine)}
-.greeting>p{margin:9px 0 0 3vw;font-size:clamp(17px,2.1vw,24px);letter-spacing:.06em}
+.greeting>p{margin:9px 0 0 3vw;font-family:"Lora",Georgia,serif;font-size:clamp(16px,1.8vw,21px);letter-spacing:.015em}
 .sprig{display:none}
 .featurePaper{position:relative;display:grid;grid-template-columns:minmax(220px,.9fr) 1.1fr;align-items:center;gap:clamp(25px,5vw,65px);min-height:360px;margin:5px 0 34px;padding:34px clamp(26px,5vw,65px);background-color:var(--wine);background-image:radial-gradient(rgba(255,255,255,.07) .7px,transparent .8px);background-size:4px 4px;color:#fff0e1;clip-path:polygon(1% 5%,6% 2%,12% 4%,18% 1%,24% 4%,31% 2%,39% 5%,46% 2%,53% 4%,61% 1%,69% 4%,77% 2%,84% 5%,92% 2%,99% 5%,98% 95%,93% 98%,87% 96%,80% 99%,73% 96%,65% 99%,57% 96%,49% 99%,42% 96%,34% 99%,26% 96%,18% 99%,10% 96%,2% 99%)}
 .featurePhoto{position:relative;min-height:260px;max-width:350px;width:100%;margin:auto;padding:10px;background:#f3e5d2;box-shadow:0 4px 12px rgba(28,9,10,.18);transform:rotate(-3deg)}
@@ -32,8 +32,8 @@ main{width:min(1100px,100% - 44px);margin:0 auto;padding:43px 0 38px}
 .photoArt:after{content:"";position:absolute;left:53%;bottom:38%;width:2px;height:55%;background:#67232d;transform:rotate(8deg);box-shadow:-36px 25px 0 -0.3px #67232d,28px 10px 0 -0.3px #67232d, -19px -3px 0 0 #67232d,17px -15px 0 0 #67232d}
 .photoArt span{font-size:52px}
 .featurePhoto>i{position:absolute;top:-13px;left:20%;padding:8px 28px;background:rgba(205,177,139,.7);font-size:0;transform:rotate(-8deg)}
-.featureCopy h2{margin:0 0 10px;font-size:clamp(36px,5vw,55px);font-style:italic;font-weight:400;letter-spacing:.02em}
-.featureCopy p{margin:0 0 23px;font-size:clamp(17px,2.2vw,23px);line-height:1.35;letter-spacing:.05em}
+.featureCopy h2{margin:0 0 10px;font-family:"Lora",Georgia,serif;font-size:clamp(32px,4vw,45px);font-style:normal;font-weight:500;letter-spacing:0}
+.featureCopy p{margin:0 0 23px;font-family:"DM Sans",Arial,sans-serif;font-size:clamp(15px,1.8vw,18px);line-height:1.5;letter-spacing:0}
 .creamBtn{display:inline-flex;align-items:center;gap:25px;padding:14px 29px;border:0;border-radius:40px;background:#f8eddf;color:var(--wineDark);font-size:19px;box-shadow:0 2px 0 rgba(255,255,255,.4)}
 .creamBtn span{font-size:24px}
 .tape{position:absolute;width:100px;height:35px;background:rgba(207,177,137,.65);box-shadow:0 1px 4px rgba(0,0,0,.08)}
@@ -42,7 +42,7 @@ main{width:min(1100px,100% - 44px);margin:0 auto;padding:43px 0 38px}
 .homeTiles{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin:0 0 35px}
 .homeTiles button{min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:rgba(255,249,240,.76);border:1px solid #ead9c7;border-radius:34px;box-shadow:0 8px 18px rgba(86,55,38,.09);color:var(--wineDark)}
 .homeTiles button>span{font-family:Arial,sans-serif;font-size:47px;font-weight:300;line-height:1}
-.homeTiles b{font-size:27px;font-weight:400}
+.homeTiles b{font-family:"Lora",Georgia,serif;font-size:22px;font-weight:500}
 .homeTiles i{width:85px;height:3px;margin-top:3px;background:#9b5e57;border-radius:50%;transform:rotate(-4deg)}
 .planPaper{position:relative;margin:0 0 25px;padding:20px 30px 24px;background:rgba(255,249,240,.82);border:1px solid #e4d3c1;box-shadow:0 3px 10px rgba(86,55,38,.05);clip-path:polygon(1% 2%,7% 0,14% 2%,23% 1%,32% 3%,40% 1%,49% 3%,58% 1%,68% 3%,78% 1%,88% 3%,99% 1%,98% 97%,91% 99%,83% 97%,74% 100%,65% 97%,55% 99%,46% 97%,37% 100%,27% 97%,17% 99%,8% 97%,1% 99%)}
 .paperHeading{display:flex;align-items:center;gap:15px;margin-bottom:15px}
@@ -56,16 +56,16 @@ main{width:min(1100px,100% - 44px);margin:0 auto;padding:43px 0 38px}
 .resumeBtn{display:block;margin:15px auto;padding:12px 24px;border:1px solid var(--line);border-radius:30px;background:var(--paper);color:var(--wine)}
 .workScreen{max-width:900px;margin:0 auto}
 .sectionHeading{position:relative;margin:0 0 25px;padding:4px 20px 18px;border-bottom:1px solid #ddc8b5}
-.sectionHeading h1{margin:0;color:var(--wineDark);font-family:"Allura","Segoe Script",cursive;font-size:clamp(37px,4vw,46px);font-weight:400}
+.sectionHeading h1{margin:0;color:var(--wineDark);font-family:"Lora",Georgia,serif;font-size:clamp(28px,3.2vw,36px);font-weight:600;letter-spacing:-.025em}
 .sectionHeading h1 span{color:var(--wine)}
-.sectionHeading p{margin:7px 0 0;font-size:16px;letter-spacing:.03em}
+.sectionHeading p{margin:7px 0 0;font-family:"DM Sans",Arial,sans-serif;font-size:14px;line-height:1.55;letter-spacing:0;color:var(--muted)}
 .paperCard{padding:25px;background:rgba(255,249,240,.82);border:1px solid #e2cfbb;border-radius:22px;box-shadow:0 7px 20px rgba(81,49,35,.07)}
 .sourceTabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:23px}
 .sourceTabs button,.uploadSource{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:10px 17px;border:1px solid #dfcbb8;border-radius:22px;background:#f6eadb;color:var(--wineDark);font-size:14px}
 .sourceTabs .selected{background:var(--wine);border-color:var(--wine);color:#fff3e6}
 .uploadSource{cursor:pointer}.uploadSource input{display:none}
-.fieldLabel{display:block;margin:17px 0 9px;color:var(--wineDark);font-size:16px;font-weight:700}
-.createCard textarea{display:block;width:100%;min-height:112px;padding:16px;border:1px solid #ddc8b5;border-radius:13px;background:#fff9f0;color:var(--ink);font:15px/1.5 Georgia,serif;resize:vertical}
+.fieldLabel{display:block;margin:17px 0 9px;color:var(--wineDark);font-family:"DM Sans",Arial,sans-serif;font-size:14px;font-weight:600}
+.createCard textarea{display:block;width:100%;min-height:112px;padding:16px;border:1px solid #ddc8b5;border-radius:13px;background:#fff9f0;color:var(--ink);font:15px/1.55 "DM Sans",Arial,sans-serif;resize:vertical}
 .counter{text-align:right;margin-top:5px;color:var(--muted);font-size:11px}
 .styleChoices,.countChoices{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .styleChoices button,.countChoices button{min-height:72px;border:1px solid #dfcbb8;border-radius:13px;background:#f7ecdf;color:#76503f;font-size:24px}
@@ -113,20 +113,20 @@ main{width:min(1100px,100% - 44px);margin:0 auto;padding:43px 0 38px}
 .metricGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
 .metricGrid>div{display:flex;flex-direction:column;gap:9px;padding:23px;background:#fff8ee;border:1px solid var(--line);border-radius:18px;text-align:center}
 .metricGrid span{font-size:13px;color:var(--muted)}.metricGrid b{font-size:35px;color:var(--wine)}
-.bottomNav{position:fixed;z-index:10;bottom:0;left:0;right:0;min-height:84px;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;padding:8px max(12px,calc((100vw - 1100px)/2));background:var(--wineDark);color:#f9ecdd}
+.bottomNav{position:fixed;z-index:100;bottom:0;left:0;right:0;min-height:84px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:center;padding:8px max(12px,calc((100vw - 1100px)/2)) calc(8px + env(safe-area-inset-bottom));background:var(--wineDark);color:#f9ecdd;box-shadow:0 -5px 18px rgba(45,18,20,.12)}
 .bottomNav:before{content:"";position:absolute;left:0;right:0;top:-13px;height:16px;background:var(--wineDark);clip-path:polygon(0 40%,4% 55%,8% 35%,12% 60%,16% 38%,20% 56%,25% 34%,30% 58%,35% 38%,40% 60%,45% 37%,50% 55%,55% 36%,60% 58%,65% 38%,70% 60%,75% 36%,80% 56%,85% 38%,90% 60%,95% 37%,100% 55%,100% 100%,0 100%)}
 .bottomNav button{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:67px;border:0;border-radius:22px;background:transparent;color:#f9ecdd}
 .bottomNav button span{font-family:Arial,sans-serif;font-size:31px;line-height:1}
 .bottomNav button small{font-size:14px}
 .bottomNav button.active{background:#ead6c0;color:var(--wineDark)}
 @media(max-width:700px){
- .app{padding-bottom:76px}.topbar{height:105px;padding:8px 17px 20px}.brandName{font-size:39px}.brandTag{font-size:10px;letter-spacing:.13em}.menuBtn{font-size:23px}.topActions{gap:10px}.topActions button{font-size:21px}.bow{width:45px;height:45px;font-size:23px}
+ .app{padding-bottom:calc(92px + env(safe-area-inset-bottom))}.bottomNav{min-height:78px}.topbar{height:105px;padding:8px 17px 20px}.brandName{font-size:39px}.brandTag{font-size:10px;letter-spacing:.13em}.menuBtn{font-size:17px}.menuBtn span{font-size:12px}.topActions{gap:10px}.topActions button{font-size:21px}.bow{width:45px;height:45px;font-size:23px}
  main{width:calc(100% - 28px);padding:34px 0 25px}
  .greeting{min-height:140px;padding:7px 10px 20px}.greeting h1{font-size:37px}.greeting>p{max-width:80%;font-size:15px;line-height:1.4}.sprig{right:3%;font-size:23px}
  .featurePaper{grid-template-columns:.85fr 1fr;gap:14px;min-height:245px;padding:25px 18px;margin-bottom:23px}.featurePhoto{min-height:165px;padding:7px}.photoArt{height:155px;font-size:55px}.photoArt span{font-size:35px}.featureCopy h2{font-size:29px}.featureCopy p{font-size:13px;margin-bottom:14px}.creamBtn{gap:10px;padding:10px 14px;font-size:13px}.creamBtn span{font-size:18px}.tape{width:58px;height:23px}
- .homeTiles{gap:8px;margin-bottom:24px}.homeTiles button{min-height:103px;border-radius:23px}.homeTiles button>span{font-size:34px}.homeTiles b{font-size:17px}.homeTiles i{width:52px}
+ .homeTiles{gap:8px;margin-bottom:24px}.homeTiles button{min-height:103px;border-radius:23px}.homeTiles button>span{font-size:34px}.homeTiles b{font-size:15px}.homeTiles i{width:52px}
  .planPaper{padding:16px 17px 22px}.paperHeading h2{font-size:27px}.planPaper label{font-size:14px;gap:11px;padding:10px 3px}.planPaper input{width:19px;height:19px}.stamp{right:5%;bottom:15px;width:57px;height:65px;font-size:29px;border-width:5px}.planPaper label{max-width:78%}
- .sectionHeading{padding:2px 7px 14px}.sectionHeading h1{font-size:34px}.sectionHeading p{font-size:13px;line-height:1.45}
+ .sectionHeading{padding:2px 7px 14px}.sectionHeading h1{font-size:28px}.sectionHeading p{font-size:13px;line-height:1.5}
  .paperCard{padding:17px;border-radius:17px}.sourceTabs{gap:6px}.sourceTabs button,.uploadSource{min-height:37px;padding:8px 11px;font-size:11px}.fieldLabel{font-size:14px}.createCard textarea{min-height:100px;font-size:13px}.styleChoices,.countChoices{gap:6px}.styleChoices button{min-height:66px;font-size:20px}.styleChoices b{font-size:10px}.countChoices button{font-size:13px}
  .pinGrid{grid-template-columns:1fr;gap:13px}.pinCard{display:grid;grid-template-columns: minmax(115px,.8fr) 1.2fr}.pinVisual{min-height:205px;padding:9px}.pinVisual>img,.imagePlaceholder{max-width:145px;border-width:4px}.imagePlaceholder b{font-size:13px}.imagePlaceholder small{font-size:9px}.uploadBtn{bottom:13px;padding:7px 9px;font-size:10px}.pinInfo{padding:12px}.pinInfo h2{font-size:15px}.pinBoard{font-size:10px}.pinInfo details{font-size:10px}
  .reviewBar{font-size:11px}.reviewBar button{font-size:11px}.queueCard{padding:16px}.queueTitle h2,.emptyState h2{font-size:23px}.queueItem{grid-template-columns:53px 1fr auto;gap:9px}.queueThumb{width:53px;height:53px}.queueItem b{font-size:12px}.metricGrid{gap:7px}.metricGrid>div{padding:15px 5px}.metricGrid span{font-size:10px}.metricGrid b{font-size:27px}
