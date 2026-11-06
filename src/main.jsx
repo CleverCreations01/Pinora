@@ -2,78 +2,66 @@ import React,{useState} from "react";
 import {createRoot} from "react-dom/client";
 import "./styles.css";
 
-const baseProducts = [
-  ["Burgundy velvet throw pillow","https://www.amazon.com/"],
-  ["Cream boucle throw blanket","https://www.amazon.com/"],
-  ["Brass table lamp","https://www.amazon.com/"],
-  ["Arched full-length mirror","https://www.amazon.com/"],
-  ["Textured ceramic vase","https://www.amazon.com/"],
-  ["Neutral woven basket","https://www.amazon.com/"]
+const baseProducts=[
+ ["Burgundy velvet throw pillow","https://www.amazon.com/"],
+ ["Cream boucle throw blanket","https://www.amazon.com/"],
+ ["Brass table lamp","https://www.amazon.com/"],
+ ["Arched full-length mirror","https://www.amazon.com/"],
+ ["Textured ceramic vase","https://www.amazon.com/"],
+ ["Neutral woven basket","https://www.amazon.com/"]
 ];
-
-const concepts = [
-  {title:"The Burgundy Bedroom Trick That Makes Cream Feel Luxe",trend:"Burgundy + cream",board:"Cozy Bedroom Ideas",time:"7:15 PM EST",score:94,description:"Want a bedroom that feels rich and restful without looking dark? The secret is balancing deep burgundy with soft cream, touchable fabrics and warm lighting. Save this palette for your next bedroom refresh, then explore the pieces that help bring the look together. #BedroomIdeas #BurgundyDecor #CozyBedroom #HomeDecorInspo #WarmNeutrals"},
-  {title:"Make Your Cozy Corner Look Collected, Not Cluttered",trend:"Boho / eclectic",board:"Cozy Home Inspiration",time:"8:05 PM EST",score:92,description:"The coziest corners rarely look like they came straight from one store. Mix a tactile throw, a warm lamp, natural textures and one vintage-inspired accent for a space that feels personal. Save this idea for your next slow Sunday styling session. #CozyHome #EclecticDecor #HomeStyling #InteriorInspiration #SmallSpaceDecor"},
-  {title:"A Reading Nook You’ll Want to Disappear Into",trend:"Warm minimalism",board:"Reading Nook Ideas",time:"6:45 PM EST",score:91,description:"Imagine closing the door on a busy day and sinking into this warm little reading nook. Soft neutrals, layered lighting and a few thoughtful textures can make even an unused corner feel intentional. Save this setup for your dream-home board. #ReadingNook #CozyCorners #WarmMinimalism #HomeInspiration #InteriorStyling"},
-  {title:"Steal This Burgundy Accent Idea for a Warmer Living Room",trend:"Burgundy accents",board:"Living Room Inspiration",time:"8:20 PM EST",score:90,description:"If your living room feels a little flat, try one deep burgundy accent against creamy upholstery and natural wood. It adds depth without taking over the whole room. Pin this color combination now so you have it ready when you restyle. #LivingRoomDecor #BurgundyAccents #CozyLivingRoom #NeutralHome #DecorIdeas"},
-  {title:"The Neutral Bedroom Formula That Never Feels Boring",trend:"Collected neutrals",board:"Bedroom Inspiration",time:"7:40 PM EST",score:89,description:"Neutral doesn’t have to mean plain. The trick is layering different textures—linen, boucle, woven details and warm wood—so the room feels calm but still full of character. Save this formula for a bedroom that feels thoughtfully finished. #NeutralBedroom #BedroomDecor #LayeredTextures #CozyHome #InteriorIdeas"},
-  {title:"How to Mix Vintage Charm With a Clean Modern Home",trend:"Vintage modern",board:"Home Decor Ideas",time:"6:55 PM EST",score:88,description:"Love modern spaces but wish they felt less showroom-perfect? Add one vintage-inspired shape, warm lighting and natural materials to make the room feel collected over time. Save this blend of old-soul character and modern simplicity. #VintageModern #HomeDecorIdeas #CollectedHome #InteriorDesignInspo #WarmInteriors"},
-  {title:"Burgundy, Cream and Wood: The Color Mix That Just Works",trend:"Earthy contrast",board:"Home Styling Ideas",time:"8:35 PM EST",score:87,description:"This palette works because every shade has a job: burgundy brings depth, cream keeps things light, and wood adds warmth. Use it in a bedroom, living room or reading corner for a cohesive look that still feels inviting. Save it before your next decor refresh. #ColorPalette #BurgundyDecor #CreamAesthetic #WoodAccents #HomeStyling"},
-  {title:"The Layering Secret Behind a Pinterest-Worthy Bedroom",trend:"Layered textures",board:"Cozy Bedroom Ideas",time:"7:05 PM EST",score:86,description:"The difference between a basic bedroom and a beautifully layered one is often texture, not more stuff. Combine soft bedding, a tactile throw, natural fibers and gentle lighting for depth that looks effortless. Save this checklist for your next room reset. #BedroomInspo #CozyBedroom #LayeredBedding #TexturedDecor #PinterestHome"},
-  {title:"Turn One Awkward Apartment Corner Into Your Favourite Spot",trend:"Moody cozy",board:"Apartment Decor",time:"9:00 PM EST",score:85,description:"That empty corner might be the most useful space in your apartment. Add a small lamp, a comfortable texture and one practical accent to create a cosy spot without crowding the room. Save this idea if you’re decorating a rental or small home. #ApartmentDecor #SmallSpaceLiving #CozyCorner #RentalFriendly #HomeIdeas"},
-  {title:"Make a Small Room Feel Expensive Without Buying Everything",trend:"Affordable luxury",board:"Small Space Decor",time:"8:50 PM EST",score:84,description:"A polished room is more about a few deliberate choices than filling every corner. Repeat two or three colours, add varied textures and choose warm lighting to make a small space feel considered. Save these ideas before spending on your next home update. #AffordableDecor #SmallSpaceDecor #BudgetHomeDecor #CozyInteriors #HomeMakeover"}
+const concepts=[
+ {title:"The Burgundy Bedroom Trick That Makes Cream Feel Luxe",trend:"Burgundy + cream",board:"Cozy Bedroom Ideas",time:"7:15 PM",score:94,description:"Want a bedroom that feels rich and restful without looking dark? Balance deep burgundy with soft cream, touchable fabrics and warm lighting. Save this palette for your next bedroom refresh. #BedroomIdeas #BurgundyDecor #CozyBedroom #HomeDecorInspo"},
+ {title:"Make Your Cozy Corner Look Collected, Not Cluttered",trend:"Boho / eclectic",board:"Cozy Home Inspiration",time:"8:05 PM",score:92,description:"Mix a tactile throw, a warm lamp, natural textures and one vintage-inspired accent for a space that feels personal. #CozyHome #EclecticDecor #HomeStyling"},
+ {title:"A Reading Nook You’ll Want to Disappear Into",trend:"Warm minimalism",board:"Reading Nook Ideas",time:"6:45 PM",score:91,description:"Soft neutrals, layered lighting and thoughtful textures can make even an unused corner feel intentional. #ReadingNook #CozyCorners"},
+ {title:"Steal This Burgundy Accent Idea for a Warmer Living Room",trend:"Burgundy accents",board:"Living Room Inspiration",time:"8:20 PM",score:90,description:"Try one deep burgundy accent against creamy upholstery and natural wood. It adds depth without taking over. #LivingRoomDecor #BurgundyAccents"},
+ {title:"The Neutral Bedroom Formula That Never Feels Boring",trend:"Collected neutrals",board:"Bedroom Inspiration",time:"7:40 PM",score:89,description:"Layer linen, boucle, woven details and warm wood for a calm room full of character. #NeutralBedroom #LayeredTextures"},
+ {title:"How to Mix Vintage Charm With a Clean Modern Home",trend:"Vintage modern",board:"Home Decor Ideas",time:"6:55 PM",score:88,description:"Add one vintage-inspired shape, warm lighting and natural materials to make a modern space feel collected. #VintageModern #WarmInteriors"},
+ {title:"Burgundy, Cream and Wood: The Color Mix That Just Works",trend:"Earthy contrast",board:"Home Styling Ideas",time:"8:35 PM",score:87,description:"Burgundy brings depth, cream keeps things light, and wood adds warmth. #ColorPalette #BurgundyDecor"},
+ {title:"The Layering Secret Behind a Pinterest-Worthy Bedroom",trend:"Layered textures",board:"Cozy Bedroom Ideas",time:"7:05 PM",score:86,description:"Combine soft bedding, a tactile throw, natural fibers and gentle lighting for effortless depth. #BedroomInspo #CozyBedroom"},
+ {title:"Turn One Awkward Apartment Corner Into Your Favourite Spot",trend:"Moody cozy",board:"Apartment Decor",time:"9:00 PM",score:85,description:"Add a small lamp, a comfortable texture and one practical accent to create a cosy spot. #ApartmentDecor #CozyCorner"},
+ {title:"Make a Small Room Feel Expensive Without Buying Everything",trend:"Affordable luxury",board:"Small Space Decor",time:"8:50 PM",score:84,description:"Repeat two or three colours, add varied textures and choose warm lighting for a considered space. #AffordableDecor #SmallSpaceDecor"}
 ];
-
-function makePins(prompt){
-  return concepts.map((c,i)=>({
-    ...c,id:Date.now()+i,prompt:prompt.trim(),imageStatus:"not-generated",imageUrl:"",imageName:"",pinType:"affiliate",
-    products:baseProducts,
-    seoTitle:c.title.length>95?c.title.slice(0,92).trim()+"…":c.title,
-    description:c.description+" (paid links) As an Amazon Associate I earn from qualifying purchases.",
-    alt:"Burgundy and cream cozy home interior with layered textures and warm lighting",
-    keywords:"burgundy home decor, cream home decor, cozy bedroom, cozy living room, warm neutral decor, eclectic home decor, affordable home decor",
-    disclosure:"As an Amazon Associate I earn from qualifying purchases."
-  }));
+const tabs=[["home","⌂","Home"],["create","✧","Create"],["schedule","▦","Schedule"],["analytics","▥","Analytics"],["saved","♧","Saved"]];
+function makePins(prompt,count){
+ return concepts.slice(0,count).map((c,i)=>({...c,id:Date.now()+i,prompt:prompt.trim(),imageStatus:"not-generated",imageUrl:"",imageName:"",pinType:"affiliate",products:baseProducts,seoTitle:c.title.length>95?c.title.slice(0,92).trim()+"…":c.title,description:c.description+" (paid links) As an Amazon Associate I earn from qualifying purchases.",alt:"Burgundy and cream cozy home interior with layered textures and warm lighting",keywords:"burgundy home decor, cream home decor, cozy bedroom, warm neutral decor",disclosure:"As an Amazon Associate I earn from qualifying purchases."}));
 }
-
 function App(){
- const [prompt,setPrompt]=useState(""),[pins,setPins]=useState([]),[tab,setTab]=useState("generate");
- const [selected,setSelected]=useState({}),[open,setOpen]=useState({}),[status,setStatus]=useState("Draft — nothing can publish automatically.");
- function generate(){const out=makePins(prompt);setPins(out);setSelected(Object.fromEntries(out.map(p=>[p.id,true])));setTab("review")}
- function toggle(id){setSelected(s=>({...s,[id]:!s[id]}))}
- function toggleOpen(id){setOpen(s=>({...s,[id]:!s[id]}))}
- function requestImage(id){setPins(ps=>ps.map(p=>p.id===id?{...p,imageStatus:"queued"}:p))}
- function uploadImage(id,file){
-  if(!file)return;
-  if(!file.type.startsWith("image/")){setStatus("Please choose an image file.");return;}
-  if(file.size>8*1024*1024){setStatus("Choose an image under 8 MB.");return;}
-  const reader=new FileReader();
-  reader.onload=()=>setPins(ps=>ps.map(p=>p.id===id?{...p,imageUrl:String(reader.result),imageName:file.name,imageStatus:"uploaded"}:p));
-  reader.onerror=()=>setStatus("Image could not be read. Please try another file.");
-  reader.readAsDataURL(file);
- }
+ const [prompt,setPrompt]=useState(""),[pins,setPins]=useState([]),[tab,setTab]=useState("home"),[count,setCount]=useState(5);
+ const [selected,setSelected]=useState({}),[open,setOpen]=useState({}),[status,setStatus]=useState("Your pins stay in draft until you approve them.");
  const chosen=pins.filter(p=>selected[p.id]);
+ function generate(){if(!prompt.trim()){setStatus("Add a Pin idea first, then generate your campaign.");return}const out=makePins(prompt,count);setPins(out);setSelected(Object.fromEntries(out.map(p=>[p.id,true])));setTab("review");setStatus("Your ideas are ready for review.");}
+ function toggle(id){setSelected(s=>({...s,[id]:!s[id]}))}
+ function uploadImage(id,file){if(!file)return;if(!file.type.startsWith("image/")){setStatus("Please choose an image file.");return}if(file.size>8*1024*1024){setStatus("Choose an image under 8 MB.");return}const reader=new FileReader();reader.onload=()=>setPins(ps=>ps.map(p=>p.id===id?{...p,imageUrl:String(reader.result),imageName:file.name,imageStatus:"uploaded"}:p));reader.onerror=()=>setStatus("Image could not be read. Please try another file.");reader.readAsDataURL(file)}
+ const goCreate=()=>setTab("create");
  return <div className="app">
-  <header><div className="brandlock"><img src="/icon.svg" alt="PINVORA logo"/><div><div className="logo">PINVORA</div><div className="sub">Plan · Create · Post · Grow</div></div></div></header>
+  <header className="topbar"><button className="menuBtn" aria-label="Menu" onClick={()=>setTab("home")}>☰</button><div className="brand"><div className="brandName">Pinvora <span>♡</span></div><div className="brandTag">Plan · Create · Pin · Grow</div></div><div className="topActions"><button aria-label="Notifications">♧</button><div className="bow">🎀</div></div></header>
   <main>
-   <section className="hero"><div className="heroCopy"><p className="eyebrow">YOUR PINTEREST STUDIO <span>✳</span></p><h1>Small Pins,<br/><em>big dreams.</em></h1><p className="muted">A little inspiration, ready to become your next beautiful Pin.</p><div className="heroNote">Made for your next good idea.</div></div><div className="stat"><span className="statLabel">CURRENT CAMPAIGN</span><b>{pins.length||"—"}</b><span>PINS IN YOUR WORKSPACE</span><div className="statDoodle">✳ &nbsp; ✿ &nbsp; ♡</div></div></section>
-   <section className="quickActions"><button onClick={()=>setTab("generate")}><span>✳</span><b>Create a campaign</b><small>Turn one idea into a plan</small></button><button onClick={()=>setTab("review")} disabled={!pins.length}><span>▧</span><b>Pin library</b><small>Review images and copy</small></button><button onClick={()=>setTab("queue")} disabled={!pins.length}><span>◷</span><b>Posting plan</b><small>Prepare your queue</small></button></section>
-   <nav><button className={tab==="generate"?"active":""} onClick={()=>setTab("generate")}>01 Generate</button><button className={tab==="review"?"active":""} onClick={()=>setTab("review")} disabled={!pins.length}>02 Review ({pins.length})</button><button className={tab==="queue"?"active":""} onClick={()=>setTab("queue")} disabled={!pins.length}>03 Schedule</button></nav>
-   {tab==="generate"&&<section className="card generator"><label>WHAT ARE WE CREATING TODAY?</label><textarea value={prompt} onChange={e=>setPrompt(e.target.value)} placeholder="Example: warm burgundy bedroom decor, small-space styling, cozy reading nooks…"/><div className="checks"><span>✓ Highest-potential concepts</span><span>✓ SEO title + description</span><span>✓ 5–6 product candidates</span><span>✓ Affiliate disclosure</span><span>✓ Board + posting time</span><span>✓ Human review first</span></div><button className="primary" onClick={generate}>CREATE MY PIN CAMPAIGN →</button></section>}
-   {tab==="review"&&<section><div className="notice"><b>Campaign review.</b> Each Pin can contain multiple products. Images are not being faked as finished assets; the connected AI image step will replace this state.</div><div className="grid">{pins.map((p,i)=><article className={"pin "+(!selected[p.id]?"off":"")} key={p.id}>
-    <div className="visual">
-    {p.imageUrl?<div className="uploadedPreview"><img src={p.imageUrl} alt={p.alt}/><div className="uploadedLabel">✓ IMAGE ADDED · {p.imageName}</div></div>:<div className="imageState"><span className="imageBadge">2:3 PIN</span><strong>{p.imageStatus==="queued"?"IMAGE QUEUED":"ADD YOUR IMAGE"}</strong><small>{p.imageStatus==="queued"?"Automatic AI generation is not connected. Upload a ChatGPT image instead.":"Choose an image you generated in ChatGPT and saved to your phone."}</small></div>}
-    <label className="uploadBtn">{p.imageUrl?"REPLACE IMAGE":"UPLOAD CHATGPT IMAGE"}<input type="file" accept="image/*" onChange={e=>{uploadImage(p.id,e.target.files?.[0]);e.target.value=""}}/></label>
-   </div>
-    <div className="pinbody"><div className="row"><b>PIN #{i+1}</b><label className="switch"><input type="checkbox" checked={!!selected[p.id]} onChange={()=>toggle(p.id)}/><i/></label></div><h2>{p.title}</h2><div className="meta"><span>📌 {p.board}</span><span>🕐 {p.time}</span><span>⚡ {p.score}/100</span></div>
-    <div className="field"><b>HIGHEST-PRIORITY SEO TITLE</b><p>{p.seoTitle}</p></div><div className="field"><b>PINTEREST DESCRIPTION</b><p>{p.description}</p></div>
-    <div className="field"><div className="fieldHead"><b>PRODUCTS TO TAG · {p.products.length}</b><span>Amazon US</span></div><div className="products">{p.products.map((prod,j)=><div className="product" key={j}><span><strong>{j+1}.</strong> {prod[0]}</span><code>{prod[1]}</code></div>)}</div></div>
-    <button className="expand" onClick={()=>toggleOpen(p.id)}>{open[p.id]?"HIDE MORE DETAILS":"SHOW ALT TEXT · KEYWORDS · DISCLOSURE"} <span>{open[p.id]?"↑":"↓"}</span></button>
-    {open[p.id]&&<div className="extra"><p><b>ALT TEXT</b>{p.alt}</p><p><b>KEYWORDS</b>{p.keywords}</p><p><b>AFFILIATE DISCLOSURE</b>{p.disclosure}</p></div>}
-    </div></article>)}</div><div className="bottombar"><span>{chosen.length} Pins selected</span><button className="secondary" onClick={()=>setStatus("Draft saved locally.")}>SAVE DRAFT</button><button className="primary" onClick={()=>{setStatus("Review complete. No Pin has been published.");setTab("queue")}}>CONTINUE TO SCHEDULE →</button></div></section>}
-   {tab==="queue"&&<section className="card queue"><div className="lock">✓</div><h2>Final approval gate</h2><p>{status}</p><div className="queueList">{chosen.map(p=><div key={p.id}><span>{p.title}</span><b>{p.time}</b></div>)}</div><button className="primary" onClick={()=>setStatus("READY — no Pin has been published. Pinterest publishing is not connected yet.")}>SCHEDULE / PUBLISH SELECTED</button><p className="tiny">Publishing stays disabled until a real Pinterest connector is configured. No background publishing or credential collection is enabled.</p></section>}
+   {tab==="home"&&<section className="homeScreen">
+    <div className="greeting"><div className="greetingPaper"><h1>Hi Rasika <span>♡</span></h1></div><p>Ready to create something beautiful today?</p><span className="sprig">✿<br/>✾<br/>❀</span></div>
+    <section className="featurePaper"><div className="featurePhoto"><div className="photoArt">✿<br/><span>✽</span></div><i>taped memory</i></div><div className="featureCopy"><h2>Create Pins</h2><p>Turn your ideas into<br/>scroll-stopping pins</p><button className="creamBtn" onClick={goCreate}>Generate Now <span>→</span></button></div><span className="tape tapeA"/><span className="tape tapeB"/></section>
+    <div className="homeTiles"><button onClick={()=>setTab("analytics")}><span>⌕</span><b>Research</b><i/></button><button onClick={()=>setTab("schedule")}><span>▦</span><b>Schedule</b><i/></button><button onClick={()=>setTab("analytics")}><span>▥</span><b>Analytics</b><i/></button></div>
+    <section className="planPaper"><div className="paperHeading"><span>📎</span><h2>Today’s Plan</h2></div><label><input type="checkbox"/> Generate 5 pin ideas</label><label><input type="checkbox"/> Schedule tomorrow’s pins</label><label><input type="checkbox" defaultChecked/> <s>Research trending topics</s></label><div className="stamp">🎀</div></section>
+    {pins.length>0&&<button className="resumeBtn" onClick={()=>setTab("review")}>Continue your campaign · {pins.length} pins →</button>}
+   </section>}
+   {tab==="create"&&<section className="workScreen">
+    <div className="sectionHeading"><h1>Create Pins <span>✧</span></h1><p>Turn your ideas into aesthetic, high-performing pins.</p></div>
+    <div className="paperCard createCard"><div className="sourceTabs"><button className="selected">✧ AI Generate</button><button onClick={()=>setStatus("Paste a product or inspiration link in the idea box below.")}>↗ From Link</button><label className="uploadSource">▧ Upload<input type="file" accept="image/*" onChange={e=>{if(e.target.files?.[0])setStatus("Reference image selected: "+e.target.files[0].name)}}/></label></div>
+     <label className="fieldLabel">Pin Idea</label><textarea value={prompt} onChange={e=>setPrompt(e.target.value)} placeholder="e.g., cozy home decor ideas, study setup, etc." maxLength={200}/><div className="counter">{prompt.length} / 200</div>
+     <label className="fieldLabel">Style</label><div className="styleChoices"><button className="chosenStyle">▧<b>Aesthetic</b></button><button>❧<b>Minimal</b></button><button>◇<b>Editorial</b></button><button>✂<b>Crafty</b></button></div>
+     <label className="fieldLabel">Pin Count</label><div className="countChoices">{[5,10,15,20].map(n=><button className={count===n?"chosenCount":""} onClick={()=>setCount(n)} key={n}>{n}</button>)}</div>
+     <button className="wineBtn generateBtn" onClick={generate}>✧ &nbsp; Generate Pins &nbsp; →</button><p className="helperText">{status}</p>
+    </div>
+   </section>}
+   {tab==="review"&&<section className="workScreen"><div className="sectionHeading"><h1>Your Pin Library</h1><p>Review each idea, add your image and approve what you love.</p></div>
+    {!pins.length?<div className="paperCard emptyState"><h2>Your scrapbook is waiting</h2><p>Create your first campaign to see your Pins here.</p><button className="wineBtn" onClick={goCreate}>Create Pins →</button></div>:<><div className="reviewBar"><span>{chosen.length} of {pins.length} selected</span><button onClick={()=>setTab("schedule")}>Continue to Schedule →</button></div><div className="pinGrid">{pins.map((p,i)=><article className="pinCard" key={p.id}><div className="pinVisual">{p.imageUrl?<img src={p.imageUrl} alt={p.alt}/>:<div className="imagePlaceholder"><span>2:3 PIN</span><b>YOUR PIN IMAGE</b><small>Add your generated image here</small></div>}<label className="uploadBtn">{p.imageUrl?"Replace image":"Upload image"}<input type="file" accept="image/*" onChange={e=>{uploadImage(p.id,e.target.files?.[0]);e.target.value=""}}/></label></div><div className="pinInfo"><div className="pinMeta"><span>PIN {String(i+1).padStart(2,"0")}</span><label><input type="checkbox" checked={!!selected[p.id]} onChange={()=>toggle(p.id)}/> Select</label></div><h2>{p.title}</h2><p className="pinBoard">♧ {p.board} · {p.time}</p><details><summary>SEO, description & products</summary><p><b>SEO title</b>{p.seoTitle}</p><p><b>Description</b>{p.description}</p><p><b>Products</b>{p.products.map(x=>x[0]).join(" · ")}</p><p><b>Disclosure</b>{p.disclosure}</p></details></div></article>)}</div></>}
+   </section>}
+   {tab==="schedule"&&<section className="workScreen"><div className="sectionHeading"><h1>Schedule Pins</h1><p>Plan and organise your Pinterest content.</p></div><div className="sourceTabs scheduleTabs"><button className="selected">☷ Queue</button><button onClick={()=>setStatus("Calendar view is coming after the core workflow is stable.")}>▦ Calendar</button><button onClick={()=>setStatus("Publishing is not connected yet.")}>◎ Published</button></div><div className="paperCard queueCard"><div className="queueTitle"><h2>Upcoming Pins</h2><span>{chosen.length}</span></div>{chosen.length?chosen.map((p,i)=><div className="queueItem" key={p.id}><div className="queueThumb">{p.imageUrl?<img src={p.imageUrl} alt=""/>:"✿"}</div><div><b>{p.title}</b><small>▦ {p.time} · Draft</small></div><button onClick={()=>setTab("review")} aria-label="Edit pin">⋮</button></div>):<div className="emptyState"><p>Your schedule is empty. Create and select Pins to see them here.</p><button className="wineBtn" onClick={goCreate}>Create Pins →</button></div>}<button className="wineBtn scheduleAction" onClick={()=>setStatus("Saved as a local draft. Pinterest publishing is not connected.")}>＋ Save schedule draft</button><p className="helperText">{status} Publishing is not connected, so nothing is posted automatically.</p></div></section>}
+   {tab==="analytics"&&<section className="workScreen"><div className="sectionHeading"><h1>Little Wins</h1><p>Your Pinterest studio at a glance.</p></div><div className="metricGrid"><div><span>Campaign Pins</span><b>{pins.length}</b></div><div><span>Selected</span><b>{chosen.length}</b></div><div><span>Images Added</span><b>{pins.filter(p=>p.imageUrl).length}</b></div></div><div className="paperCard emptyState"><h2>Grow with intention</h2><p>Connect Pinterest analytics after the core creation and review flow is stable.</p></div></section>}
+   {tab==="saved"&&<section className="workScreen"><div className="sectionHeading"><h1>Saved Pins</h1><p>Your selected ideas, kept close.</p></div>{chosen.length?<div className="pinGrid">{chosen.map(p=><article className="pinCard savedCard" key={p.id}><div className="pinVisual">{p.imageUrl?<img src={p.imageUrl} alt={p.alt}/>:<div className="imagePlaceholder">✿</div>}</div><div className="pinInfo"><h2>{p.title}</h2><p>{p.board}</p></div></article>)}</div>:<div className="paperCard emptyState"><h2>Nothing saved just yet</h2><p>Select your favourite Pins in the library and they’ll appear here.</p><button className="wineBtn" onClick={()=>setTab("review")}>Open Pin Library →</button></div>}</section>}
   </main>
+  <nav className="bottomNav">{tabs.map(([id,icon,label])=><button key={id} className={tab===id?"active":""} onClick={()=>setTab(id)}><span>{icon}</span><small>{label}</small></button>)}</nav>
  </div>
 }
 createRoot(document.getElementById("root")).render(<App/>);
-if ("serviceWorker" in navigator && import.meta.env.PROD) { window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {})); }
+if("serviceWorker" in navigator&&import.meta.env.PROD){window.addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}))}
