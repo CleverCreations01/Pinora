@@ -55,10 +55,59 @@ function makePins(prompt,count,type,previous=[],genre=""){
  });
 }
 function makeGraphic(pin){
- const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
- const palettes=[["#f2e4d4","#682632","#b88d75"],["#e9e3d4","#455348","#b28c70"],["#f4e6df","#773d4a","#c99b8b"],["#eee3cf","#604638","#a58b61"]];
- const pal=palettes[Math.abs(String(pin.trend||"").length+String(pin.genre||"").length)%palettes.length];
- const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1500" viewBox="0 0 1000 1500"><rect width="1000" height="1500" fill="${pal[0]}"/><rect x="48" y="48" width="904" height="1404" rx="18" fill="none" stroke="${pal[2]}" stroke-width="3"/><circle cx="790" cy="380" r="235" fill="${pal[2]}" opacity=".28"/><circle cx="250" cy="620" r="180" fill="${pal[1]}" opacity=".10"/><path d="M100 1120 C260 900 430 1280 620 1030 S850 920 920 1080" fill="none" stroke="${pal[1]}" stroke-width="8" opacity=".28"/><text x="100" y="170" fill="${pal[1]}" font-family="Georgia,serif" font-size="34" letter-spacing="8">${esc((pin.genre||"PINTEREST").toUpperCase())}</text><text x="100" y="690" fill="${pal[1]}" font-family="Georgia,serif" font-size="76" font-weight="bold">${esc(pin.title).slice(0,34)}</text><text x="100" y="790" fill="${pal[1]}" font-family="Arial,sans-serif" font-size="31">${esc(pin.trend)} · EDITORIAL IDEAS</text><path d="M100 850 H420" stroke="${pal[2]}" stroke-width="5"/><text x="100" y="1320" fill="${pal[1]}" font-family="Georgia,serif" font-size="30" letter-spacing="5">PINVORA  ·  SAVE FOR LATER</text></svg>`;
+ const esc=v=>String(v||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+ const palette={
+  "home decor":["#ead9c2","#68232d","#b18b70","#e6cbb1"],
+  beauty:["#f0ddd7","#743a46","#b98783","#ead0c4"],
+  fashion:["#e8d9c5","#56232c","#a77a69","#d7b99e"],
+  kitchen:["#e9dfc9","#4d5946","#a48d6c","#d8c8a8"],
+  study:["#e8ddc9","#514238","#9a8068","#d4bea0"],
+  travel:["#e9dfcf","#58665f","#b08b72","#d8c2a6"]
+ }[String(pin.genre||"").toLowerCase()]||["#eadbc7","#64232e","#aa8268","#dec3a7"];
+ const [paper,wine,ink,light]=palette;
+ const raw=String(pin.title||"A Thoughtful Collection");
+ const words=raw.split(/\\s+/);let lines=[],line="";
+ for(const word of words){if((line+" "+word).trim().length>23&&line){lines.push(line);line=word}else line=(line+" "+word).trim()}
+ if(line)lines.push(line);lines=lines.slice(0,4);
+ const titleSvg=lines.map((t,i)=>`<text x="104" y="${665+i*82}" class="headline">${esc(t)}</text>`).join("");
+ const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1500" viewBox="0 0 1000 1500">
+ <defs>
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="3" seed="8"/><feColorMatrix values="0 0 0 0 .48 0 0 0 0 .36 0 0 0 0 .25 0 0 0 .16 0"/></filter>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceAlpha" stdDeviation="18"/><feOffset dy="15"/><feComponentTransfer><feFuncA type="linear" slope=".22"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <pattern id="speckle" width="42" height="42" patternUnits="userSpaceOnUse"><circle cx="6" cy="8" r="1.5" fill="#8f715b" opacity=".18"/><circle cx="31" cy="25" r="1" fill="#8f715b" opacity=".14"/><path d="M14 35l5-1" stroke="#8f715b" opacity=".13"/></pattern>
+  <style>.headline{font-family:Georgia,serif;font-size:66px;font-weight:bold;fill:${wine};letter-spacing:-1.5px}.script{font-family:cursive;font-style:italic;fill:${wine};font-size:37px}.small{font-family:Georgia,serif;fill:${wine};font-size:25px;letter-spacing:4px}</style>
+ </defs>
+ <rect width="1000" height="1500" fill="${paper}"/>
+ <path d="M0 0H1000V265L978 253 954 271 929 249 901 266 875 250 847 270 817 250 789 269 761 249 733 269 705 251 676 270 648 248 618 269 589 250 560 271 530 249 501 268 472 250 442 270 413 249 382 270 352 249 322 269 291 250 261 271 230 249 201 269 171 250 141 270 111 250 80 269 51 248 24 265 0 253Z" fill="${wine}"/>
+ <path d="M0 0H1000V265L978 253 954 271 929 249 901 266 875 250 847 270 817 250 789 269 761 249 733 269 705 251 676 270 648 248 618 269 589 250 560 271 530 249 501 268 472 250 442 270 413 249 382 270 352 249 322 269 291 250 261 271 230 249 201 269 171 250 141 270 111 250 80 269 51 248 24 265 0 253Z" fill="url(#speckle)"/>
+ <path d="M60 300L925 282 946 1250 82 1272Z" fill="${light}" opacity=".7" filter="url(#shadow)"/>
+ <path d="M76 292L925 309 908 1260 91 1245Z" fill="${paper}" stroke="#c7a98c" stroke-width="3" filter="url(#shadow)"/>
+ <path d="M76 292L925 309 908 1260 91 1245Z" fill="url(#speckle)" opacity=".85"/>
+ <path d="M76 292L925 309 908 1260 91 1245Z" fill="#9a765d" opacity=".10" filter="url(#grain)"/>
+ <path d="M112 378C240 330 340 370 444 347S677 366 872 336" stroke="#b99a7e" stroke-width="2" fill="none" opacity=".55"/>
+ <g transform="translate(730 410) rotate(9)">
+  <path d="M0 190C18 110 38 48 90 -25M44 118C-5 88 -23 55 -19 20M65 74C112 70 140 40 151 3M29 151C-4 142 -31 124 -43 93" stroke="#6d6247" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <g fill="#8b3340"><ellipse cx="-18" cy="18" rx="17" ry="35" transform="rotate(-35 -18 18)"/><ellipse cx="3" cy="27" rx="15" ry="30" transform="rotate(24 3 27)"/><ellipse cx="150" cy="1" rx="15" ry="31" transform="rotate(42 150 1)"/><ellipse cx="130" cy="27" rx="14" ry="27" transform="rotate(-24 130 27)"/><ellipse cx="-42" cy="92" rx="15" ry="28" transform="rotate(-35 -42 92)"/></g>
+  <g fill="#b68a55"><circle cx="-7" cy="19" r="8"/><circle cx="141" cy="12" r="7"/><circle cx="-35" cy="92" r="7"/></g>
+ </g>
+ <g transform="translate(95 430) rotate(-3)">
+  <path d="M0 0L590 8 602 340 12 326Z" fill="${wine}" filter="url(#shadow)"/>
+  <path d="M0 0L30 7 48 0 67 9 89 1 112 8 135 0 158 9 182 1 206 8 231 0 255 8 280 0 304 8 330 1 355 8 380 0 405 8 430 1 455 9 480 0 505 8 530 0 555 8 590 0 602 340 575 331 552 340 527 330 504 339 480 330 455 339 430 330 406 339 381 329 356 338 331 329 306 338 281 329 256 338 231 329 206 337 181 328 156 337 131 328 106 336 81 327 56 335 31 326 12 334Z" fill="${wine}"/>
+  <text x="42" y="80" class="small" fill="#f0dfca">A LITTLE COLLECTION OF</text>
+  ${titleSvg}
+  <text x="43" y="294" class="script" fill="#f0dfca">${esc(pin.trend||"collected with care")}</text>
+ </g>
+ <g transform="translate(140 365) rotate(-9)"><path d="M0 0H170L158 66H-10Z" fill="#c8a77f" opacity=".72"/><path d="M0 0H170L158 66H-10Z" fill="#fff0d9" opacity=".28"/></g>
+ <g transform="translate(690 1130) rotate(8)">
+  <rect x="0" y="0" width="180" height="220" fill="#fff8ec" stroke="#d1b79b" stroke-width="5" filter="url(#shadow)"/>
+  <rect x="13" y="13" width="154" height="194" fill="${light}"/>
+  <path d="M30 170Q80 80 135 155" stroke="${wine}" stroke-width="8" fill="none" opacity=".65"/>
+  <g fill="#8b3340"><circle cx="74" cy="80" r="17"/><circle cx="105" cy="57" r="13"/><circle cx="128" cy="92" r="16"/><circle cx="50" cy="112" r="12"/></g>
+  <path d="M88 80L82 165M110 61L112 160M50 112L72 170" stroke="#68704d" stroke-width="5"/>
+ </g>
+ <g transform="translate(390 1300) rotate(-2)"><path d="M0 0H330L322 66H-8Z" fill="${wine}"/><text x="18" y="43" fill="#f7e9d7" font-family="Georgia,serif" font-size="25" letter-spacing="5">PINVORA  ·  SAVE THIS</text></g>
+ <rect width="1000" height="1500" filter="url(#grain)" opacity=".22"/>
+ </svg>`;
  return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
 }
 function addAmazonTag(url,tag){try{const u=new URL(url);if(!/amazon\.com$/i.test(u.hostname.replace(/^www\./,""))&&!/amazon\.com$/i.test(u.hostname))return url;if(tag)u.searchParams.set("tag",tag);return u.toString()}catch{return url}}
@@ -74,11 +123,11 @@ function App(){
  function uploadImage(id,file){if(!file)return;if(!file.type.startsWith("image/")){setStatus("Please choose an image file.");return}if(file.size>8*1024*1024){setStatus("Choose an image under 8 MB.");return}const reader=new FileReader();reader.onload=()=>setPins(ps=>ps.map(p=>p.id===id?{...p,imageUrl:String(reader.result),imageName:file.name,imageStatus:"uploaded"}:p));reader.onerror=()=>setStatus("Image could not be read. Please try another file.");reader.readAsDataURL(file)}
  const goCreate=()=>setTab("create");
  return <div className="app">
-  <header className="topbar"><button className="menuBtn" aria-label="Go to Home" onClick={()=>setTab("home")}>← <span>Home</span></button><div className="brand"><div className="brandName">Pinvora <span>♡</span></div><div className="brandTag">Plan · Create · Pin · Grow</div></div><div className="topActions"><button aria-label="Notifications" onClick={()=>setStatus("You’re all caught up.")}>♧</button><div className="bow" aria-label="Pinvora profile">P</div></div></header>
+  <header className="topbar"><button className="menuBtn" aria-label="Go to Home" onClick={()=>setTab("home")}>← <span>Home</span></button><div className="brand"><div className="brandName">PINVORA</div><div className="brandTag">Plan · Create · Pin · Grow</div></div><div className="topActions"><button aria-label="Notifications" onClick={()=>setStatus("You’re all caught up.")}>♧</button><div className="bow" aria-label="Pinvora profile"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M31 49C29 32 35 19 48 10M34 37C22 31 17 23 16 14M36 28C46 29 53 24 57 17" fill="none" stroke="#6b2932" strokeWidth="2.5" strokeLinecap="round"/><g fill="#8d3542"><circle cx="15" cy="13" r="7"/><circle cx="23" cy="17" r="7"/><circle cx="47" cy="9" r="7"/><circle cx="55" cy="16" r="6"/></g><g fill="#d2a66d"><circle cx="19" cy="15" r="2"/><circle cx="51" cy="12" r="2"/></g></svg></div></div></header>
   <main>
    {tab==="home"&&<section className="homeScreen">
     <div className="greeting"><div className="greetingPaper"><h1>Hi Rasika <span>♡</span></h1></div><p>Ready to create something beautiful today?</p></div>
-    <section className="featurePaper"><div className="featurePhoto"><div className="photoArt" role="img" aria-label="Burgundy flowers in a ceramic vase"/><i>taped memory</i></div><div className="featureCopy"><h2>Create Pins</h2><p>Turn your ideas into<br/>scroll-stopping pins</p><button className="creamBtn" onClick={goCreate}>Generate Now <span>→</span></button></div><span className="tape tapeA"/><span className="tape tapeB"/></section>
+    <section className="featurePaper"><div className="featurePhoto"><div className="photoArt" role="img" aria-label="Vintage botanical scrapbook photograph"><span className="photoBloom">✿</span></div><i>collected moments</i></div><div className="featureCopy"><h2>Create Pins</h2><p>Turn your ideas into<br/>scroll-stopping pins</p><button className="creamBtn" onClick={goCreate}>Generate Now <span>→</span></button></div><span className="tape tapeA"/><span className="tape tapeB"/></section>
     <div className="homeTiles"><button onClick={()=>setTab("review")}><span>▤</span><b>Your Pins</b><i/></button><button onClick={()=>setTab("schedule")}><span>▦</span><b>Schedule</b><i/></button><button onClick={()=>setTab("saved")}><span>◇</span><b>Saved</b><i/></button></div>
 
     {pins.length>0&&<button className="resumeBtn" onClick={()=>setTab("review")}>Continue your campaign · {pins.length} pins →</button>}
