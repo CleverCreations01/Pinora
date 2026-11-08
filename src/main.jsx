@@ -17,7 +17,7 @@ function topicGroup(topic){
  const t=topic.toLowerCase();
  return trendThemes.find(x=>t.includes(x.topic)||x.topic.split(" ").some(w=>w.length>4&&t.includes(w)))||{topic,moods:mixMoods,angles:mixAngles,products:["useful essentials","accessories","organizers","decor pieces","everyday finds"]};
 }
-function titleCase(s){return s.replace(/\\b\\w/g,c=>c.toUpperCase())}
+function titleCase(s){return s.replace(/\b\w/g,c=>c.toUpperCase())}
 function makePins(prompt,count,type,previous=[]){
  const topic=prompt.trim().replace(/[.!?]+$/,"");
  const group=topicGroup(topic),recent=new Set(previous),now=Date.now();
@@ -49,7 +49,8 @@ function makePins(prompt,count,type,previous=[]){
   return {id:now+i,title,trend:c.mood,board:titleCase(topic)+" Ideas",time:"Not scheduled",score:null,description,seoTitle:title,alt:title+" — "+c.mood+" inspiration",keywords:[topic,c.mood,c.angle,product].join(", "),disclosure:"As an Amazon Associate I earn from qualifying purchases.",pinType:affiliate?"affiliate":"inspiration",productName:product,productUrl:"",imageStatus:"not-generated",imageUrl:"",imageName:"",products:[]};
  });
 }
-function addAmazonTag(url,tag){try{const u=new URL(url);if(!/amazon\\.com$/i.test(u.hostname.replace(/^www\\./,""))&&!/amazon\\.com$/i.test(u.hostname))return url;if(tag)u.searchParams.set("tag",tag);return u.toString()}catch{return url}}\nfunction readSavedState(){try{return JSON.parse(localStorage.getItem("pinvora_workspace_v1")||"{}")}catch{return {}}}
+function addAmazonTag(url,tag){try{const u=new URL(url);if(!/amazon\.com$/i.test(u.hostname.replace(/^www\./,""))&&!/amazon\.com$/i.test(u.hostname))return url;if(tag)u.searchParams.set("tag",tag);return u.toString()}catch{return url}}
+function readSavedState(){try{return JSON.parse(localStorage.getItem("pinvora_workspace_v1")||"{}")}catch{return {}}}
 function App(){
  const [initial]=useState(readSavedState);
  const [prompt,setPrompt]=useState(initial.prompt||""),[pins,setPins]=useState(Array.isArray(initial.pins)?initial.pins:[]),[tab,setTab]=useState("home"),[count,setCount]=useState(10),[campaignType,setCampaignType]=useState("mix"),[associateTag,setAssociateTag]=useState(initial.associateTag||"");
