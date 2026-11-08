@@ -134,3 +134,30 @@ main{width:min(1100px,100% - 44px);margin:0 auto;padding:43px 0 38px}
 }
 @media(max-width:380px){.brandName{font-size:34px}.brandTag{font-size:9px}.topActions{gap:5px}.bow{width:39px;height:39px}.featurePaper{grid-template-columns:.8fr 1fr;padding:20px 13px}.featureCopy h2{font-size:25px}.featureCopy p{font-size:12px}.creamBtn{padding:9px 10px;font-size:11px}.homeTiles b{font-size:15px}.bottomNav button small{font-size:10px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+/* Campaign creator and editor controls */
+.typeChoices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.typeChoices button{min-height:44px;padding:9px 12px;border:1px solid #dfcbb8;border-radius:24px;background:#f7ecdf;color:var(--wineDark);font:600 13px "DM Sans",Arial,sans-serif}
+.typeChoices button.chosenCount{background:var(--wine);border-color:var(--wine);color:#fff3e6}
+.editField{display:block;width:100%;min-width:0;margin:7px 0 12px;padding:11px 12px;border:1px solid #ddc8b5;border-radius:9px;background:#fffaf2;color:var(--ink);font:13px/1.5 "DM Sans",Arial,sans-serif}
+.editDescription{min-height:112px;resize:vertical}
+.productHint{margin:4px 0 10px;color:var(--wine);font:13px "DM Sans",Arial,sans-serif}
+.affiliateDisclosure{margin:8px 0;color:var(--muted);font:11px/1.45 "DM Sans",Arial,sans-serif}
+.settingsCard{max-width:620px;margin:0 auto}
+.settingsCard h2{margin:0 0 8px;color:var(--wineDark);font:600 24px "Lora",Georgia,serif}
+.settingsCard>p{color:var(--muted);font:13px/1.55 "DM Sans",Arial,sans-serif}
+@media(min-width:900px){
+ .app{padding-left:220px;padding-bottom:30px}
+ .topbar{position:relative;height:104px;padding-left:38px;padding-right:45px}
+ .topbar:after{height:24px;bottom:-13px}
+ .bottomNav{position:fixed;top:104px;bottom:0;left:0;right:auto;width:220px;min-height:0;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:7px;padding:34px 16px 25px;background:var(--wineDark);box-shadow:4px 0 16px rgba(45,18,20,.1)}
+ .bottomNav:before{display:none}
+ .bottomNav button{min-height:52px;display:flex;flex-direction:row;justify-content:flex-start;gap:15px;padding:0 18px;border-radius:12px}
+ .bottomNav button span{width:23px;font-size:22px;text-align:center}
+ .bottomNav button small{font:500 14px "DM Sans",Arial,sans-serif}
+ .bottomNav button.active{background:#f4eadc;color:var(--wineDark)}
+ main{width:min(1200px,100% - 72px);padding-top:40px}
+ .homeScreen,.workScreen{max-width:1100px;margin:0 auto}
+ .pinGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px){.typeChoices{gap:6px}.typeChoices button{padding:8px 6px;font-size:11px}.editField{font-size:12px}}
