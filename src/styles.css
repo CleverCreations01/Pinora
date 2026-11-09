@@ -218,3 +218,16 @@ body{background:#e8d6c0}
 .photoArt:before{left:18%;bottom:10%;width:64%;height:48%;border-radius:2px;background:linear-gradient(90deg,#7e6655 0 3%,#e7d8c5 3% 97%,#806b59 97%);box-shadow:0 0 0 8px rgba(248,237,221,.65),0 12px 22px rgba(54,37,27,.2)}
 .photoArt:after{display:block;content:"";position:absolute;left:28%;top:14%;width:44%;height:35%;background:linear-gradient(135deg,#c2ad91,#eee3d3);border:8px solid #f5eadb;box-shadow:0 5px 12px rgba(54,37,27,.16)}
 @media(max-width:700px){.featurePaper{clip-path:none}}
+
+
+/* Remove the unwanted geometric / logo treatment completely */
+.app{background:#eee2d1!important;background-image:linear-gradient(115deg,#f2e7d8,#ead9c5 55%,#f3e8da)!important}
+.topbar{background:#571e28!important;background-image:linear-gradient(110deg,#48151e,#68232d 55%,#4a1720)!important}
+.topbar:after,.bottomNav:before{display:none!important;content:none!important;clip-path:none!important}
+.featurePaper:before,.featurePaper:after{display:none!important;content:none!important;clip-path:none!important}
+.bow{display:none!important}
+.pinVisual,.pinInfo{background-image:none!important}
+.bottomNav{background:#511923!important;background-image:none!important}
+.homeTiles button>span{display:none!important}
+.photoArt{background:linear-gradient(145deg,#c9b49a,#eee3d3 52%,#a58b72)!important}
+.photoArt:before,.photoArt:after{display:none!important}
