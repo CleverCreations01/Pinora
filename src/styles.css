@@ -394,3 +394,106 @@ main{width:min(1500px,calc(100% - 88px))!important;padding:45px 0 50px!important
   background-color:#f2e6d7!important;
   background-image:linear-gradient(115deg,#f2e6d7,#ead8c3 55%,#f4e9dc)!important;
 }
+
+
+/* PINVORA scrapbook correction: clean canvas, layered paper only */
+html,body,#root{min-height:100%;background:#fff!important}
+body{background:#fff!important}
+.app{
+  min-height:100vh!important;
+  padding-left:0!important;
+  padding-right:0!important;
+  background:#fff!important;
+  background-image:none!important;
+}
+@media(min-width:900px){
+  .app{padding-left:0!important;padding-bottom:28px!important}
+  .bottomNav{display:none!important}
+  .topbar.refHeader{margin-left:0!important}
+}
+
+/* Remove the old global paper grain and repeated SVG mask from the canvas. */
+.app,.app::before,.app::after{background-image:none!important}
+.refHeroTorn,.refMonthNote,.refActionCards button,.refApprovalPaper,
+.workScreen .sectionHeading,.paperCard,.createCard,.queueCard,.settingsCard,
+.emptyState,.pinCard,.pinInfo,.pinVisual,.reviewBar,.scheduleTabs,.metricGrid>div,
+.genreChoices button,.styleChoices button,.countChoices button,.typeChoices button,
+.reviewBar button,.wineBtn,.creamBtn,.uploadBtn,.scheduleTabs span{
+  -webkit-mask-image:none!important;
+  mask-image:none!important;
+}
+
+/* Handmade paper: warm stock, subtle fibres, layered offset sheets and soft shadows. */
+.refHeroTorn{
+  isolation:isolate!important;
+  background:
+    repeating-linear-gradient(0deg,rgba(111,78,53,.018) 0 1px,transparent 1px 5px),
+    linear-gradient(135deg,#fffaf1,#f2e4d1)!important;
+  border:1px solid #d9c3a8!important;
+  outline:1px solid rgba(125,87,58,.16);
+  box-shadow:2px 3px 0 #d9c3a8,5px 7px 0 #ead9c3,0 15px 28px rgba(66,42,28,.13)!important;
+  clip-path:polygon(0 2%,7% 1.2%,15% 2%,23% 1.1%,31% 1.8%,40% 1%,49% 1.8%,58% 1.1%,67% 2%,76% 1.1%,85% 1.8%,94% 1%,100% 2.2%,99.5% 97%,92% 98.4%,84% 97.5%,75% 99%,66% 97.6%,57% 99%,48% 97.7%,39% 99%,30% 97.5%,21% 98.8%,12% 97.4%,1% 99%);
+}
+.refHeroTorn:before{
+  inset:-7px!important;
+  background:#682832!important;
+  clip-path:polygon(0 3%,8% 1%,17% 3%,26% 1%,35% 3%,44% 1%,53% 3%,62% 1%,71% 3%,80% 1%,89% 3%,100% 1%,99% 98%,90% 96%,81% 99%,72% 97%,63% 99%,54% 97%,45% 99%,36% 97%,27% 99%,18% 97%,9% 99%,0 97%)!important;
+  filter:drop-shadow(0 5px 3px rgba(57,27,24,.18));
+}
+.refHeroTorn:after{
+  inset:0!important;
+  background:
+    repeating-linear-gradient(2deg,rgba(116,81,55,.025) 0 1px,transparent 1px 6px),
+    linear-gradient(115deg,#fff9ef,#efdeca)!important;
+  clip-path:polygon(0 2%,7% 1%,15% 2.2%,23% 1.2%,31% 2%,40% 1%,49% 2%,58% 1.1%,67% 2%,76% 1%,85% 2%,94% 1%,100% 2%,99% 97%,91% 98%,82% 97%,73% 99%,64% 97%,55% 99%,46% 97%,37% 99%,28% 97%,19% 99%,10% 97%,1% 99%)!important;
+  z-index:-1;
+}
+.refMonthNote,.refActionCards button,.refApprovalPaper,.workScreen .sectionHeading,
+.paperCard,.createCard,.queueCard,.settingsCard,.emptyState,.pinCard,.reviewBar,.scheduleTabs,
+.metricGrid>div{
+  position:relative;
+  border:1px solid #d8c2a6!important;
+  border-radius:2px!important;
+  background:
+    repeating-linear-gradient(1deg,rgba(112,77,51,.022) 0 1px,transparent 1px 6px),
+    linear-gradient(125deg,#fffaf1,#f1e2ce)!important;
+  box-shadow:2px 3px 0 rgba(154,119,85,.20),5px 7px 0 rgba(211,190,164,.42),0 12px 22px rgba(73,49,32,.09)!important;
+  clip-path:polygon(0 1.5%,8% .8%,17% 1.7%,27% .8%,37% 1.6%,47% .8%,57% 1.7%,67% .8%,77% 1.6%,87% .8%,100% 1.5%,99.2% 99%,89% 98.2%,79% 99%,69% 98.2%,59% 99%,49% 98.2%,39% 99%,29% 98.2%,19% 99%,9% 98.2%,.5% 99%);
+}
+.refMonthNote{transform:rotate(1.2deg)!important}
+.refActionCards button{min-height:108px}
+.refActionCards button.refActionPrimary{
+  background:
+    repeating-linear-gradient(1deg,rgba(255,239,219,.035) 0 1px,transparent 1px 6px),
+    linear-gradient(110deg,#4d1721,#722c36)!important;
+  border-color:#55202a!important;
+  color:#fff0df!important;
+}
+.refApproval{background:transparent!important;border:0!important;box-shadow:none!important}
+.refApprovalPaper{margin-top:18px}
+.workScreen .sectionHeading{padding:17px 23px 19px}
+.paperCard,.createCard,.queueCard,.settingsCard,.emptyState{padding:25px}
+.pinCard{overflow:visible!important;background:#f5e8d7!important}
+.pinVisual{
+  background:#e9d8c3!important;
+  background-image:repeating-linear-gradient(0deg,rgba(112,77,51,.025) 0 1px,transparent 1px 7px)!important;
+  border:8px solid #fffaf1!important;
+  box-shadow:0 4px 13px rgba(54,36,25,.15)!important;
+}
+.pinInfo{background:#fffaf1!important}
+.editField,.createCard textarea,.createCard input{
+  border-radius:2px!important;
+  background:#fffdf8!important;
+  background-image:none!important;
+}
+.genreChoices button,.styleChoices button,.countChoices button,.typeChoices button,
+.reviewBar button,.wineBtn,.creamBtn,.uploadBtn,.scheduleTabs span{
+  border-radius:3px!important;
+  -webkit-mask-image:none!important;mask-image:none!important;
+  box-shadow:2px 3px 0 rgba(103,70,47,.13),0 4px 9px rgba(75,46,32,.07)!important;
+}
+@media(max-width:900px){
+  .app{padding-left:0!important}
+  .refHeroTorn{box-shadow:2px 3px 0 #d9c3a8,4px 6px 0 #ead9c3,0 10px 20px rgba(66,42,28,.12)!important}
+  .paperCard,.createCard,.queueCard,.settingsCard,.emptyState{padding:17px}
+}
