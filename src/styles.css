@@ -497,3 +497,81 @@ body{background:#fff!important}
   .refHeroTorn{box-shadow:2px 3px 0 #d9c3a8,4px 6px 0 #ead9c3,0 10px 20px rgba(66,42,28,.12)!important}
   .paperCard,.createCard,.queueCard,.settingsCard,.emptyState{padding:17px}
 }
+
+
+/* Final visual reset requested: retain warm beige canvas, remove cubes and scrapbook styling. */
+html,body,#root{min-height:100%;background:#f2e6d7!important}
+body{background:#f2e6d7!important}
+.app{
+  min-height:100vh!important;
+  padding-left:0!important;
+  padding-right:0!important;
+  background-color:#f2e6d7!important;
+  background-image:none!important;
+}
+@media(min-width:900px){
+  .app{padding-left:0!important;padding-bottom:28px!important}
+}
+
+/* No paper masks, torn edges, grain, cube/grid patterns or layered-sheet shadows. */
+.app,.app *{
+  -webkit-mask-image:none!important;
+  mask-image:none!important;
+}
+.refHeroTorn:before,.refHeroTorn:after,
+.topbar.refHeader:after,.refApproval:before{
+  display:none!important;
+  content:none!important;
+}
+.refHeroTorn{
+  isolation:auto!important;
+  min-height:320px;
+  background:#f7ecdd!important;
+  border:1px solid #e1cfb9!important;
+  border-radius:22px!important;
+  clip-path:none!important;
+  outline:0!important;
+  box-shadow:0 8px 22px rgba(86,55,38,.10)!important;
+}
+.refMonthNote,.refActionCards button,.refApprovalPaper,
+.workScreen .sectionHeading,.paperCard,.createCard,.queueCard,.settingsCard,
+.emptyState,.pinCard,.pinInfo,.pinVisual,.reviewBar,.scheduleTabs,.metricGrid>div{
+  clip-path:none!important;
+  border-radius:16px!important;
+  border:1px solid #e1cfb9!important;
+  background-color:#f8efe3!important;
+  background-image:none!important;
+  box-shadow:0 5px 15px rgba(86,55,38,.075)!important;
+  outline:0!important;
+}
+.refMonthNote{transform:none!important}
+.refActionCards button{min-height:108px}
+.refActionCards button.refActionPrimary{
+  background:#64232d!important;
+  border-color:#64232d!important;
+  color:#fff0df!important;
+}
+.refApproval{background:transparent!important;border:0!important;box-shadow:none!important}
+.refApprovalPaper{margin-top:18px}
+.pinCard{overflow:hidden!important;background:#f8efe3!important}
+.pinVisual{background:#eadbc9!important}
+.pinInfo{background:#f8efe3!important}
+.editField,.createCard textarea,.createCard input{
+  border-radius:9px!important;
+  background:#fffaf3!important;
+  background-image:none!important;
+  box-shadow:inset 0 1px 3px rgba(83,54,34,.045)!important;
+}
+.genreChoices button,.styleChoices button,.countChoices button,.typeChoices button,
+.reviewBar button,.wineBtn,.creamBtn,.uploadBtn,.scheduleTabs span{
+  border-radius:24px!important;
+  background-image:none!important;
+  -webkit-mask-image:none!important;mask-image:none!important;
+  box-shadow:none!important;
+}
+.refTopNav button{box-shadow:none!important}
+@media(max-width:900px){
+  .app{padding-left:0!important}
+  .refHeroTorn{min-height:245px}
+  .paperCard,.createCard,.queueCard,.settingsCard,.emptyState{padding:17px}
+}
