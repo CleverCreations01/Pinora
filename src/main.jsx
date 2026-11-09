@@ -50,7 +50,8 @@ function makePins(prompt,count,type,previous=[],genre=""){
   let subject=focus||actualGenre;
   if(actualGenre==="home decor"&&!focus) subject=roomIdeas[(i+Math.floor(seed/7))%roomIdeas.length];
   if(actualGenre==="home decor"&&room) subject=room;
-  const angle=pick(data.angles,seed+i);\n  const focusNote=focus?` Creative direction: ${focus}.`:"";
+  const angle=pick(data.angles,seed+i);
+  const focusNote=focus?` Creative direction: ${focus}.`:"";
   const mood=pick(data.moods,seed*3+i);
   const product=pick(data.products,seed*5+i);
   const template=pick(patterns[actualGenre]||patterns["home decor"],seed+i);
