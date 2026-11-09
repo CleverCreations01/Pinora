@@ -389,8 +389,8 @@ main{width:min(1500px,calc(100% - 88px))!important;padding:45px 0 50px!important
 }
 
 
-/* Keep the page canvas plain white; scrapbook texture stays on paper components */
+/* Keep the original warm scrapbook canvas colours; remove only the distracting texture */
 .app{
-  background-color:#fff!important;
-  background-image:none!important;
+  background-color:#f2e6d7!important;
+  background-image:linear-gradient(115deg,#f2e6d7,#ead8c3 55%,#f4e9dc)!important;
 }
