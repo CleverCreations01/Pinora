@@ -387,3 +387,62 @@ main{width:min(1500px,calc(100% - 88px))!important;padding:45px 0 50px!important
  .workScreen .sectionHeading{padding:13px 16px 15px}
  .genreChoices button,.styleChoices button,.countChoices button,.typeChoices button{min-height:42px}
 }
+
+
+/* Calm white canvas + softer handmade paper edges (no geometric distortion) */
+:root{--pinvora-torn-mask:none}
+html,body,#root{background:#fff!important}
+body{background:#fff!important}
+.app{background:#fff!important;background-image:none!important}
+main{background:transparent!important}
+.topbar.refHeader:after{
+  display:block!important;content:"";height:13px!important;bottom:-8px!important;
+  left:-1%!important;right:-1%!important;background:#fff!important;
+  clip-path:none!important;mask:none!important;-webkit-mask:none!important;
+  border-radius:0 0 48% 42% / 0 0 34% 28%;
+  filter:drop-shadow(0 2px 2px rgba(68,40,28,.10));
+}
+.refHeroTorn:before,.refHeroTorn:after{
+  clip-path:none!important;mask:none!important;-webkit-mask:none!important;
+  border-radius:3px 2px 4px 2px / 2px 4px 2px 3px;
+}
+.refHeroTorn:before{inset:-3px!important}
+.refHeroTorn:after{inset:0!important}
+.refMonthNote,.refActionCards button,.refApprovalPaper,
+.paperCard,.createCard,.queueCard,.settingsCard,.emptyState,
+.pinCard,.pinInfo,.reviewBar,.scheduleTabs,.metricGrid>div,
+.workScreen .sectionHeading,.genreChoices button,.styleChoices button,
+.countChoices button,.typeChoices button,.reviewBar button,.wineBtn,
+.creamBtn,.uploadBtn,.refTopNav button,.refActionCards button{
+  clip-path:none!important;mask:none!important;-webkit-mask:none!important;
+}
+.refMonthNote,.refActionCards button,.refApprovalPaper,
+.paperCard,.createCard,.queueCard,.settingsCard,.emptyState,
+.pinCard,.pinInfo,.reviewBar,.scheduleTabs,.metricGrid>div,
+.workScreen .sectionHeading{
+  border-radius:2px 3px 1px 4px / 3px 1px 4px 2px!important;
+  background-image:linear-gradient(135deg,#fffdf9 0%,#f8f1e8 52%,#f4eadf 100%)!important;
+  box-shadow:2px 4px 0 rgba(115,78,53,.055),0 6px 16px rgba(77,46,34,.07)!important;
+}
+.refMonthNote{background-color:#fbf5ed!important}
+.refActionCards button{background-image:linear-gradient(135deg,#fffdf9,#f6eee4)!important}
+.refActionCards button.refActionPrimary{background-image:linear-gradient(110deg,#4d1721,#722c36)!important}
+.refApprovalPaper{background-image:linear-gradient(135deg,#fffaf2,#f3e7d8)!important}
+.workScreen .sectionHeading{background-image:linear-gradient(135deg,#fffdf9,#f7efe5)!important}
+.genreChoices button,.styleChoices button,.countChoices button,.typeChoices button,
+.reviewBar button,.wineBtn,.creamBtn,.uploadBtn,.refTopNav button{
+  mask:none!important;-webkit-mask:none!important;
+  border-radius:5px 3px 4px 2px!important;
+  background-image:linear-gradient(135deg,#fffaf2,#f0e2d1)!important;
+}
+.genreChoices button.chosenGenre,.styleChoices button.selected,
+.countChoices button.selected,.typeChoices button.selected,
+.reviewBar button,.wineBtn,.refActionCards button.refActionPrimary{
+  background-image:linear-gradient(110deg,#4d1721,#722c36)!important;
+}
+.topbar.refHeader{
+  background-image:linear-gradient(110deg,#46151d,#68232d 52%,#48151e)!important;
+}
+@media(max-width:900px){
+ .topbar.refHeader:after{height:10px!important;bottom:-6px!important}
+}
