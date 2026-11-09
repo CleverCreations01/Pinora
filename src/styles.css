@@ -195,3 +195,26 @@ body{background:#e8d6c0}
 .pinInfo{background-image:radial-gradient(rgba(91,55,39,.035) .6px,transparent .8px);background-size:5px 5px}
 .bottomNav{background-color:#511923;background-image:radial-gradient(rgba(255,235,214,.09) .65px,transparent .8px);background-size:5px 5px}
 @media(max-width:700px){.brandName{font-size:29px;letter-spacing:.1em}.brandTag{font-size:16px}.bow{width:43px;height:43px;padding:6px}.photoBloom{font-size:38px}.photoArt{height:155px}.featurePhoto{padding:7px 7px 19px}}
+
+
+/* Reference correction: tactile torn-paper edges, not dotted backgrounds or floral clip-art */
+.app{background-color:#eee0cc;background-image:repeating-linear-gradient(2deg,rgba(111,77,53,.025) 0 1px,transparent 1px 4px),repeating-linear-gradient(92deg,rgba(255,255,255,.11) 0 1px,transparent 1px 7px),linear-gradient(110deg,#f1e4d2,#ead8c1 55%,#f2e5d4);background-size:auto}
+.topbar{background-color:#531923;background-image:linear-gradient(115deg,#48151e,#68232d 55%,#4a1720);background-size:auto}
+.topbar:after{height:28px;bottom:-17px;background:#eee0cc;clip-path:polygon(0 0,2% 9%,4% 4%,6% 17%,8% 7%,10% 19%,13% 9%,15% 21%,18% 8%,20% 15%,23% 5%,25% 17%,28% 8%,30% 20%,33% 6%,36% 17%,39% 7%,41% 18%,44% 5%,47% 16%,50% 7%,53% 19%,56% 6%,59% 16%,62% 7%,65% 18%,68% 6%,71% 17%,74% 8%,77% 20%,80% 6%,83% 17%,86% 7%,89% 19%,92% 6%,95% 16%,98% 7%,100% 13%,100% 100%,0 100%)}
+.featurePaper{clip-path:none;border-radius:2.4% 1.3% 2.1% 1.6% / 2% 1.2% 2.4% 1.7%;outline:1px solid rgba(255,240,220,.18);box-shadow:0 12px 28px rgba(50,20,20,.22);position:relative}
+.featurePaper:before,.featurePaper:after{content:"";position:absolute;left:0;right:0;height:10px;pointer-events:none;background:inherit;opacity:.95}
+.featurePaper:before{top:-3px;clip-path:polygon(0 0,4% 40%,8% 15%,13% 65%,18% 22%,24% 55%,29% 18%,35% 70%,41% 20%,47% 58%,53% 16%,59% 68%,65% 22%,71% 57%,77% 16%,83% 62%,89% 19%,95% 55%,100% 20%,100% 100%,0 100%)}
+.featurePaper:after{bottom:-3px;clip-path:polygon(0 0,5% 55%,10% 18%,16% 72%,22% 25%,28% 61%,34% 16%,40% 68%,46% 22%,52% 58%,58% 15%,64% 70%,70% 21%,76% 59%,82% 17%,88% 67%,94% 23%,100% 58%,100% 100%,0 100%)}
+.app{background-image:repeating-linear-gradient(2deg,rgba(111,77,53,.025) 0 1px,transparent 1px 4px),repeating-linear-gradient(92deg,rgba(255,255,255,.11) 0 1px,transparent 1px 7px),linear-gradient(110deg,#f1e4d2,#ead8c1 55%,#f2e5d4)}
+.pinVisual{background-color:#dfcbb3;background-image:repeating-linear-gradient(0deg,rgba(100,70,48,.035) 0 1px,transparent 1px 5px),repeating-linear-gradient(90deg,rgba(255,255,255,.12) 0 1px,transparent 1px 8px);background-size:auto}
+.pinCard{border-radius:2px 3px 2px 4px}
+.pinInfo{background-color:#f7ecdc;background-image:repeating-linear-gradient(1deg,rgba(100,70,48,.022) 0 1px,transparent 1px 5px);background-size:auto}
+.bow{border-radius:50%;display:grid;place-items:center}
+.bow svg{display:none}
+.bow:after{content:"P";font:600 27px Georgia,serif;color:#64232d}
+.photoBloom{display:none}
+.photoArt:after{display:none}
+.photoArt{background:linear-gradient(135deg,#d8c5ae,#eee3d3 48%,#a78d75);position:relative}
+.photoArt:before{left:18%;bottom:10%;width:64%;height:48%;border-radius:2px;background:linear-gradient(90deg,#7e6655 0 3%,#e7d8c5 3% 97%,#806b59 97%);box-shadow:0 0 0 8px rgba(248,237,221,.65),0 12px 22px rgba(54,37,27,.2)}
+.photoArt:after{display:block;content:"";position:absolute;left:28%;top:14%;width:44%;height:35%;background:linear-gradient(135deg,#c2ad91,#eee3d3);border:8px solid #f5eadb;box-shadow:0 5px 12px rgba(54,37,27,.16)}
+@media(max-width:700px){.featurePaper{clip-path:none}}
