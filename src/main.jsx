@@ -45,12 +45,12 @@ function makePins(prompt,count,type,previous=[],genre=""){
  const out=[];
  for(let i=0;i<count;i++){
   const seed=now+i*37+focus.length*17;
-  const actualGenre=genre==="mix"?mixGenres[(i+Math.floor(seed/13))%mixGenres.length]:(genre||"home decor");
+  const actualGenre=genre==="mix"?(room?"home decor":mixGenres[(i+Math.floor(seed/13))%mixGenres.length]):(genre||"home decor");
   const data=topicDetails[actualGenre]||topicDetails["home decor"];
   let subject=focus||actualGenre;
   if(actualGenre==="home decor"&&!focus) subject=roomIdeas[(i+Math.floor(seed/7))%roomIdeas.length];
   if(actualGenre==="home decor"&&room) subject=room;
-  const angle=pick(data.angles,seed+i);
+  const angle=pick(data.angles,seed+i);\n  const focusNote=focus?` Creative direction: ${focus}.`:"";
   const mood=pick(data.moods,seed*3+i);
   const product=pick(data.products,seed*5+i);
   const template=pick(patterns[actualGenre]||patterns["home decor"],seed+i);
@@ -68,8 +68,8 @@ function makePins(prompt,count,type,previous=[],genre=""){
   }[actualGenre];
   const keywords=[subject,actualGenre,mood,angle,product,"Pinterest ideas"].join(", ");
   const tags=[subject,actualGenre,angle].map(x=>"#"+x.toLowerCase().replace(/[^a-z0-9]+/g,"")).join(" ");
-  const description=descriptions+" "+tags;
-  const imagePrompt=`Create a premium vertical 2:3 editorial Pinterest image about ${subject}. Specific subject: ${finalTitle}. Show a believable, detailed ${actualGenre} scene with a clear focal subject, real-world composition, natural light, rich tactile materials and refined magazine art direction. Mood: ${mood}. Supporting angle: ${angle}. Avoid generic collages, icons, clip-art, flowers as decoration, fake packaging, logos, watermarks and illegible text. The scene must visibly communicate the subject, not just a mood word.`;
+  const description=descriptions+(focusNote?focusNote:"")+" "+tags;
+  const imagePrompt=`Create a premium vertical 2:3 editorial Pinterest image about ${subject}. Specific subject: ${finalTitle}. Show a believable, detailed ${actualGenre} scene with a clear focal subject, real-world composition, natural light, rich tactile materials and refined magazine art direction. Mood: ${mood}. Supporting angle: ${angle}.${focusNote} Avoid generic collages, icons, clip-art, flowers as decoration, fake packaging, logos, watermarks and illegible text. The scene must visibly communicate the subject, not just a mood word.`;
   out.push({id:now+i,title:finalTitle,trend:mood,genre:actualGenre,board:titleCase(subject)+" Ideas",time:"Not scheduled",score:null,description,seoTitle:finalTitle,alt:finalTitle+" — "+subject+" "+actualGenre+" editorial",keywords,imagePrompt,disclosure:"As an Amazon Associate I earn from qualifying purchases.",pinType:isProduct?"product-led":"inspiration",productName:product,productUrl:"",imageStatus:"graphic-generated",imageUrl:makeGraphic({title:finalTitle,genre:actualGenre,trend:mood,subject}),imageName:"",products:[]});
  }
  return out;
