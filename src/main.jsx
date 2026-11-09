@@ -10,103 +10,99 @@ const trendThemes=[
  {topic:"study",moods:["soft academia","clean desk","cozy focus","minimal setup","colour-coded"],angles:["desk setup ideas","study essentials","organization tips","small-space setup","productivity finds"],products:["desk lamps","planners","pen organizers","laptop stands","storage"]},
  {topic:"travel",moods:["slow travel","coastal escape","city break","minimal packing","weekend getaway"],angles:["packing essentials","travel outfit ideas","weekend itineraries","travel organization","useful travel finds"],products:["packing cubes","travel bags","organizers","accessories","travel bottles"]}
 ];
-const mixMoods=["warm minimalism","vintage-inspired","soft romantic","earthy modern","playful colour","quiet luxury","cozy neutral","editorial"];
-const mixAngles=["fresh ideas","practical tips","budget-friendly finds","styling inspiration","things worth saving","simple upgrades","gift ideas","beginner-friendly guide"];
+const mixGenres=["home decor","beauty","fashion","kitchen","study","travel"];
+const roomIdeas=["living room","bedroom","entryway","small bathroom","rental apartment"];
+const topicDetails={
+ "home decor":{moods:["collected vintage","warm minimal","English cottage","earthy contemporary","soft romantic"],angles:["layered lighting","art and frame arrangements","textile combinations","small-space storage","furniture layout"],products:["linen cushion covers","ceramic table lamps","vintage-style wall art","woven storage baskets","arched mirrors"]},
+ beauty:{moods:["fresh everyday","soft glam","skin-first","minimal routine","polished natural"],angles:["a five-minute routine","vanity organisation","everyday makeup combinations","travel-ready essentials","brush and tool care"],products:["makeup organisers","vanity mirrors","brush holders","travel makeup bags","makeup brushes"]},
+ fashion:{moods:["relaxed tailoring","modern feminine","quiet luxury","weekend casual","minimal wardrobe"],angles:["three ways to style one piece","a wearable colour palette","capsule wardrobe building","day-to-night outfit formulas","accessory pairings"],products:["structured handbags","simple gold jewellery","everyday flats","classic belts","wardrobe basics"]},
+ kitchen:{moods:["warm farmhouse","modern rustic","colourful practical","calm minimal","collected kitchen"],angles:["countertop zones","drawer organisation","open-shelf styling","small-kitchen storage","weeknight prep setup"],products:["glass pantry jars","drawer dividers","wooden utensil holders","countertop organisers","stackable containers"]},
+ study:{moods:["soft academia","focused minimal","warm practical","colour-coded calm","creative desk"],angles:["a compact desk layout","cable-free organisation","study zone lighting","notebook and stationery setup","small-room workspace ideas"],products:["adjustable desk lamps","desk organisers","laptop stands","weekly planners","pen cups"]},
+ travel:{moods:["slow weekend","coastal light","city-break practical","carry-on minimal","heritage escape"],angles:["a carry-on packing list","a weekend outfit plan","personal-item organisation","a compact travel kit","a simple two-day itinerary"],products:["packing cubes","weekender bags","travel pouches","luggage organisers","refillable travel bottles"]}
+};
 function pick(arr,seed){return arr[Math.abs(seed)%arr.length]}
-function topicGroup(topic){
- const t=topic.toLowerCase();
- return trendThemes.find(x=>t.includes(x.topic)||x.topic.split(" ").some(w=>w.length>4&&t.includes(w)))||{topic,moods:mixMoods,angles:mixAngles,products:["useful essentials","accessories","organizers","decor pieces","everyday finds"]};
-}
-function titleCase(s){return s.replace(/\b\w/g,c=>c.toUpperCase())}
+function titleCase(s){return s.replace(/\\b\\w/g,c=>c.toUpperCase())}
 function makePins(prompt,count,type,previous=[],genre=""){
- const topic=prompt.trim().replace(/[.!?]+$/,"");
- const group=genre==="mix"?{topic,moods:mixMoods,angles:mixAngles,products:["useful essentials","accessories","organizers","decor pieces","everyday finds"]}:trendThemes.find(x=>x.topic===genre)||topicGroup(topic);
- const priorTitles=new Set(previous.map(x=>typeof x==="string"?x:x.title).filter(Boolean));
- const priorGenres=previous.map(x=>typeof x==="object"?x.genre:"").filter(Boolean);
- const genreCounts=priorGenres.reduce((a,g)=>(a[g]=(a[g]||0)+1,a),{});
+ const focus=prompt.trim().replace(/[.!?]+$/,"");
  const now=Date.now();
- const titlePatterns=[
-  (m,a)=>`${titleCase(m)} ${titleCase(topic)}: Ideas That Feel Thoughtfully Put Together`,
-  (m,a)=>`A Practical Guide to ${titleCase(topic)} — ${titleCase(a)}`,
-  (m,a)=>`The Details That Make ${titleCase(topic)} Feel More ${titleCase(m)}`,
-  (m,a)=>`Worth Saving: ${titleCase(topic)} Ideas for Everyday Life`,
-  (m,a)=>`How to Bring More ${titleCase(m)} Style Into ${titleCase(topic)}`,
-  (m,a)=>`Smart ${titleCase(topic)} Ideas for a More Beautiful, Useful Space`,
-  (m,a)=>`A Fresh Edit of ${titleCase(topic)}: ${titleCase(a)}`,
-  (m,a)=>`Small Changes, Better Results: ${titleCase(topic)}`,
-  (m,a)=>`Thoughtful ${titleCase(topic)} Ideas to Come Back To`,
-  (m,a)=>`The ${titleCase(topic)} Edit: ${titleCase(m)} and ${titleCase(a)}`
- ];
- const candidates=[];
- for(let i=0;i<Math.max(count*5,30);i++){
-  const seed=now+i*19+topic.length*31;
-  const mood=pick(group.moods,seed+i);
-  const angle=pick(group.angles,seed*3+i);
-  const title=titlePatterns[i%titlePatterns.length](mood,angle);
-  if(!priorTitles.has(title)&&!candidates.some(x=>x.title===title)) candidates.push({title,mood,angle,seed});
+ const priorTitles=new Set(previous.map(x=>typeof x==="string"?x:x.title).filter(Boolean));
+ const room=focus.match(/living room|bedroom|entryway|bathroom|kitchen|dining room|home office|rental apartment|small apartment/i)?.[0]?.toLowerCase();
+ const patterns={
+  "home decor":[
+   (r,a)=>`${titleCase(r)} Ideas That Feel Collected, Warm and Personal`,
+   (r,a)=>`How to Style a ${titleCase(r)}: Lighting, Texture and Layout`,
+   (r,a)=>`A More Beautiful ${titleCase(r)}: ${titleCase(a)} That Actually Work`,
+   (r,a)=>`The ${titleCase(r)} Refresh: Five Details That Change the Whole Room`,
+   (r,a)=>`Small ${titleCase(r)}? Smart Layouts and Storage Worth Stealing`,
+   (r,a)=>`A Thoughtful ${titleCase(r)}: Colours, Textures and Finishing Touches`
+  ],
+  beauty:[(r,a)=>`The Everyday Beauty Edit: ${titleCase(a)} That Earn Their Place`,(r,a)=>`A Simple ${titleCase(r)} Routine for Busy Mornings`,(r,a)=>`Beauty Details That Make Your Daily Routine Feel Better`],
+  fashion:[(r,a)=>`The ${titleCase(r)} Outfit Formula: Pieces That Work Together`,(r,a)=>`A Wearable Wardrobe: ${titleCase(a)} for Real Life`,(r,a)=>`How to Make Everyday Outfits Look More Considered`],
+  kitchen:[(r,a)=>`A Better-Organised Kitchen: ${titleCase(a)} for Everyday Cooking`,(r,a)=>`Kitchen Details That Make Small Spaces Work Harder`,(r,a)=>`The Practical Kitchen Edit: Storage That Looks Good, Too`],
+  study:[(r,a)=>`A Study Desk That Helps You Settle In and Focus`,(r,a)=>`The Small Desk Setup: ${titleCase(a)} That Save Space`,(r,a)=>`A Calm, Useful Study Corner: Layout, Light and Storage`],
+  travel:[(r,a)=>`The Weekend Travel Edit: ${titleCase(a)} Without Overpacking`,(r,a)=>`A More Thoughtful Carry-On: ${titleCase(a)} for a Short Trip`,(r,a)=>`Small Travel Details That Make the Whole Trip Easier`]
+ };
+ const out=[];
+ for(let i=0;i<count;i++){
+  const seed=now+i*37+focus.length*17;
+  const actualGenre=genre==="mix"?mixGenres[(i+Math.floor(seed/13))%mixGenres.length]:(genre||"home decor");
+  const data=topicDetails[actualGenre]||topicDetails["home decor"];
+  let subject=focus||actualGenre;
+  if(actualGenre==="home decor"&&!focus) subject=roomIdeas[(i+Math.floor(seed/7))%roomIdeas.length];
+  if(actualGenre==="home decor"&&room) subject=room;
+  const angle=pick(data.angles,seed+i);
+  const mood=pick(data.moods,seed*3+i);
+  const product=pick(data.products,seed*5+i);
+  const template=pick(patterns[actualGenre]||patterns["home decor"],seed+i);
+  const title=template(subject,angle);
+  const uniqueTitle=priorTitles.has(title)||out.some(x=>x.title===title)?title.replace(/: /,": A Fresh Take on "):title;
+  const finalTitle=uniqueTitle;
+  const isProduct=type==="affiliate"||(type==="mix"&&i%4===3);
+  const descriptions={
+   "home decor":`Give your ${subject} a more finished feel without filling it with more stuff. Start with ${angle.toLowerCase()}, then bring in considered lighting, tactile fabrics and a few pieces with character. The goal is a room that feels lived-in, balanced and unmistakably yours. Save this guide while planning your next ${subject} refresh. Ideas include ${product.toLowerCase()} and other details that work beautifully together.`,
+   beauty:`A useful, achievable beauty edit built around ${angle.toLowerCase()}. Keep the routine practical: choose products that suit the way you get ready, give everything a proper place and make the steps easy to repeat. Save this for your next everyday routine or vanity reset. Explore details such as ${product.toLowerCase()}.`,
+   fashion:`A wearable style guide built around ${angle.toLowerCase()}. Focus on proportion, repeatable combinations and pieces you can reach for more than once. Use the ideas as a starting point, adapt the palette to your wardrobe and save the combinations you want to try. Consider finishing with ${product.toLowerCase()}.`,
+   kitchen:`Make everyday cooking feel easier with ${angle.toLowerCase()}. Give frequently used items a clear home, keep work surfaces practical and choose storage that suits the way you actually cook. Save these ideas for your next kitchen reset, including useful pieces such as ${product.toLowerCase()}.`,
+   study:`Create a study space that feels inviting and helps you get started. This guide focuses on ${angle.toLowerCase()}, with practical ways to improve light, clear visual clutter and keep essentials within reach. Save it before rearranging your desk; useful additions can include ${product.toLowerCase()}.`,
+   travel:`Make a short trip simpler with ${angle.toLowerCase()}. Plan outfits around pieces that work together, keep essentials easy to reach and leave room for the things you find along the way. Save this checklist before your next getaway. Helpful options include ${product.toLowerCase()}.`
+  }[actualGenre];
+  const keywords=[subject,actualGenre,mood,angle,product,"Pinterest ideas"].join(", ");
+  const tags=[subject,actualGenre,angle].map(x=>"#"+x.toLowerCase().replace(/[^a-z0-9]+/g,"")).join(" ");
+  const description=descriptions+" "+tags;
+  const imagePrompt=`Create a premium vertical 2:3 editorial Pinterest image about ${subject}. Specific subject: ${finalTitle}. Show a believable, detailed ${actualGenre} scene with a clear focal subject, real-world composition, natural light, rich tactile materials and refined magazine art direction. Mood: ${mood}. Supporting angle: ${angle}. Avoid generic collages, icons, clip-art, flowers as decoration, fake packaging, logos, watermarks and illegible text. The scene must visibly communicate the subject, not just a mood word.`;
+  out.push({id:now+i,title:finalTitle,trend:mood,genre:actualGenre,board:titleCase(subject)+" Ideas",time:"Not scheduled",score:null,description,seoTitle:finalTitle,alt:finalTitle+" — "+subject+" "+actualGenre+" editorial",keywords,imagePrompt,disclosure:"As an Amazon Associate I earn from qualifying purchases.",pinType:isProduct?"product-led":"inspiration",productName:product,productUrl:"",imageStatus:"graphic-generated",imageUrl:makeGraphic({title:finalTitle,genre:actualGenre,trend:mood,subject}),imageName:"",products:[]});
  }
- return candidates.slice(0,count).map((c,i)=>{
-  const product=pick(group.products,c.seed+i);
-  const productLed=type==="affiliate"||(type==="mix"&&((i%4===2)||(i%4===3)));
-  const title=c.title;
-  const description=`Build a ${c.mood} approach to ${topic.toLowerCase()} with ideas you can actually use. This pin brings together ${c.angle.toLowerCase()} and practical details, with a focus on ${product.toLowerCase()}. Save it to your ${titleCase(topic)} board as a reference for your next refresh, shopping list or weekend project. Come back when you are ready to compare options and put your own version together. #${topic.replace(/[^a-z0-9]/gi,"")} #${c.mood.replace(/[^a-z0-9]/gi,"")} #PinterestIdeas #${product.replace(/[^a-z0-9]/gi,"")}`;
-  const imagePrompt=`Create a vertical 2:3 Pinterest editorial graphic about ${topic}. Visual direction: ${c.mood}. Concept: ${c.angle}. Include a clear photographic-style focal composition, refined typography with the headline "${title}", warm natural lighting, layered editorial details, generous negative space and a cohesive colour palette. No logos, watermarks, fake product packaging or unreadable text.`;
-  return {id:now+i,title,trend:c.mood,genre:group.topic,board:titleCase(topic)+" Ideas",time:"Not scheduled",score:null,description,seoTitle:title,alt:title+" — "+c.mood+" editorial pin",keywords:[topic,c.mood,c.angle,product].join(", "),imagePrompt,disclosure:"As an Amazon Associate I earn from qualifying purchases.",pinType:productLed?"product-led":"inspiration",productName:product,productUrl:"",imageStatus:"graphic-generated",imageUrl:makeGraphic({title,genre:group.topic,trend:c.mood}),imageName:"",products:[]};
- });
+ return out;
 }
 function makeGraphic(pin){
  const esc=v=>String(v||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
- const palette={
-  "home decor":["#ead9c2","#68232d","#b18b70","#e6cbb1"],
-  beauty:["#f0ddd7","#743a46","#b98783","#ead0c4"],
-  fashion:["#e8d9c5","#56232c","#a77a69","#d7b99e"],
-  kitchen:["#e9dfc9","#4d5946","#a48d6c","#d8c8a8"],
-  study:["#e8ddc9","#514238","#9a8068","#d4bea0"],
-  travel:["#e9dfcf","#58665f","#b08b72","#d8c2a6"]
- }[String(pin.genre||"").toLowerCase()]||["#eadbc7","#64232e","#aa8268","#dec3a7"];
- const [paper,wine,ink,light]=palette;
- const raw=String(pin.title||"A Thoughtful Collection");
- const words=raw.split(/\\s+/);let lines=[],line="";
- for(const word of words){if((line+" "+word).trim().length>23&&line){lines.push(line);line=word}else line=(line+" "+word).trim()}
- if(line)lines.push(line);lines=lines.slice(0,4);
- const titleSvg=lines.map((t,i)=>`<text x="104" y="${665+i*82}" class="headline">${esc(t)}</text>`).join("");
+ const colors={"home decor":["#e8d8c2","#64232d","#725b4a"],beauty:["#ead8d1","#783e49","#72535a"],fashion:["#e7d9c7","#54232c","#655044"],kitchen:["#e8dfca","#4d5946","#665d48"],study:["#e8ddca","#514238","#5c4c3e"],travel:["#e9dfcf","#58665f","#665648"]};
+ const [paper,wine,ink]=colors[String(pin.genre||"").toLowerCase()]||colors["home decor"];
+ const words=String(pin.title||"A considered edit").split(/\\s+/);let lines=[],line="";
+ words.forEach(w=>{if((line+" "+w).trim().length>22&&line){lines.push(line);line=w}else line=(line+" "+w).trim()});if(line)lines.push(line);
+ const title=lines.slice(0,5).map((t,i)=>`<text x="88" y="${600+i*65}" class="title">${esc(t)}</text>`).join("");
  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1500" viewBox="0 0 1000 1500">
  <defs>
-  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="3" seed="8"/><feColorMatrix values="0 0 0 0 .48 0 0 0 0 .36 0 0 0 0 .25 0 0 0 .16 0"/></filter>
-  <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceAlpha" stdDeviation="18"/><feOffset dy="15"/><feComponentTransfer><feFuncA type="linear" slope=".22"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  <pattern id="speckle" width="42" height="42" patternUnits="userSpaceOnUse"><circle cx="6" cy="8" r="1.5" fill="#8f715b" opacity=".18"/><circle cx="31" cy="25" r="1" fill="#8f715b" opacity=".14"/><path d="M14 35l5-1" stroke="#8f715b" opacity=".13"/></pattern>
-  <style>.headline{font-family:Georgia,serif;font-size:66px;font-weight:bold;fill:${wine};letter-spacing:-1.5px}.script{font-family:cursive;font-style:italic;fill:${wine};font-size:37px}.small{font-family:Georgia,serif;fill:${wine};font-size:25px;letter-spacing:4px}</style>
+  <filter id="paperEdge" x="-8%" y="-8%" width="116%" height="116%"><feTurbulence type="fractalNoise" baseFrequency=".018 .11" numOctaves="2" seed="19" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="17" xChannelSelector="R" yChannelSelector="G"/></filter>
+  <filter id="fiber"><feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .46 0 0 0 0 .34 0 0 0 0 .23 0 0 0 .10 0"/></filter>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceAlpha" stdDeviation="16"/><feOffset dy="16"/><feComponentTransfer><feFuncA type="linear" slope=".2"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <style>.title{font-family:Georgia,serif;font-size:52px;font-weight:bold;fill:#f8ecdc;letter-spacing:-1px}.small{font:22px Georgia,serif;letter-spacing:4px;fill:#f2dfca}.note{font:italic 28px Georgia,serif;fill:${wine}}</style>
  </defs>
- <rect width="1000" height="1500" fill="${paper}"/>
- <path d="M0 0H1000V265L978 253 954 271 929 249 901 266 875 250 847 270 817 250 789 269 761 249 733 269 705 251 676 270 648 248 618 269 589 250 560 271 530 249 501 268 472 250 442 270 413 249 382 270 352 249 322 269 291 250 261 271 230 249 201 269 171 250 141 270 111 250 80 269 51 248 24 265 0 253Z" fill="${wine}"/>
- <path d="M0 0H1000V265L978 253 954 271 929 249 901 266 875 250 847 270 817 250 789 269 761 249 733 269 705 251 676 270 648 248 618 269 589 250 560 271 530 249 501 268 472 250 442 270 413 249 382 270 352 249 322 269 291 250 261 271 230 249 201 269 171 250 141 270 111 250 80 269 51 248 24 265 0 253Z" fill="url(#speckle)"/>
- <path d="M60 300L925 282 946 1250 82 1272Z" fill="${light}" opacity=".7" filter="url(#shadow)"/>
- <path d="M76 292L925 309 908 1260 91 1245Z" fill="${paper}" stroke="#c7a98c" stroke-width="3" filter="url(#shadow)"/>
- <path d="M76 292L925 309 908 1260 91 1245Z" fill="url(#speckle)" opacity=".85"/>
- <path d="M76 292L925 309 908 1260 91 1245Z" fill="#9a765d" opacity=".10" filter="url(#grain)"/>
- <path d="M112 378C240 330 340 370 444 347S677 366 872 336" stroke="#b99a7e" stroke-width="2" fill="none" opacity=".55"/>
- <g transform="translate(730 410) rotate(9)">
-  <path d="M0 190C18 110 38 48 90 -25M44 118C-5 88 -23 55 -19 20M65 74C112 70 140 40 151 3M29 151C-4 142 -31 124 -43 93" stroke="#6d6247" stroke-width="7" fill="none" stroke-linecap="round"/>
-  <g fill="#8b3340"><ellipse cx="-18" cy="18" rx="17" ry="35" transform="rotate(-35 -18 18)"/><ellipse cx="3" cy="27" rx="15" ry="30" transform="rotate(24 3 27)"/><ellipse cx="150" cy="1" rx="15" ry="31" transform="rotate(42 150 1)"/><ellipse cx="130" cy="27" rx="14" ry="27" transform="rotate(-24 130 27)"/><ellipse cx="-42" cy="92" rx="15" ry="28" transform="rotate(-35 -42 92)"/></g>
-  <g fill="#b68a55"><circle cx="-7" cy="19" r="8"/><circle cx="141" cy="12" r="7"/><circle cx="-35" cy="92" r="7"/></g>
+ <rect width="1000" height="1500" fill="#d8c2a8"/>
+ <path d="M38 105L960 82 940 1384 60 1407Z" fill="#b99c7d" opacity=".48" filter="url(#shadow)"/>
+ <path d="M55 90L946 112 920 1390 72 1368Z" fill="${paper}" filter="url(#paperEdge)"/>
+ <path d="M55 90L946 112 920 1390 72 1368Z" fill="${paper}" filter="url(#fiber)" opacity=".18"/>
+ <path d="M72 210Q118 193 162 207T252 205T344 209T436 204T528 210T620 204T712 208T804 204T920 210L910 242Q860 231 812 241T716 239T620 244T524 239T428 244T332 240T236 244T140 240T76 248Z" fill="${wine}" filter="url(#paperEdge)"/>
+ <g transform="rotate(-2 500 710)" filter="url(#shadow)">
+  <path d="M92 370Q150 355 210 365T330 360T450 366T570 360T690 367T810 360T912 370L900 1110Q840 1100 780 1110T660 1106T540 1112T420 1107T300 1112T180 1106T100 1115Z" fill="${wine}" filter="url(#paperEdge)"/>
+  <text x="90" y="470" class="small">A ROOM-BY-ROOM EDIT</text>
+  ${title}
+  <text x="90" y="1010" class="note" fill="#f5e6d5">${esc(pin.trend||"considered details")}</text>
  </g>
- <g transform="translate(95 430) rotate(-3)">
-  <path d="M0 0L590 8 602 340 12 326Z" fill="${wine}" filter="url(#shadow)"/>
-  <path d="M0 0L30 7 48 0 67 9 89 1 112 8 135 0 158 9 182 1 206 8 231 0 255 8 280 0 304 8 330 1 355 8 380 0 405 8 430 1 455 9 480 0 505 8 530 0 555 8 590 0 602 340 575 331 552 340 527 330 504 339 480 330 455 339 430 330 406 339 381 329 356 338 331 329 306 338 281 329 256 338 231 329 206 337 181 328 156 337 131 328 106 336 81 327 56 335 31 326 12 334Z" fill="${wine}"/>
-  <text x="42" y="80" class="small" fill="#f0dfca">A LITTLE COLLECTION OF</text>
-  ${titleSvg}
-  <text x="43" y="294" class="script" fill="#f0dfca">${esc(pin.trend||"collected with care")}</text>
- </g>
- <g transform="translate(140 365) rotate(-9)"><path d="M0 0H170L158 66H-10Z" fill="#c8a77f" opacity=".72"/><path d="M0 0H170L158 66H-10Z" fill="#fff0d9" opacity=".28"/></g>
- <g transform="translate(690 1130) rotate(8)">
-  <rect x="0" y="0" width="180" height="220" fill="#fff8ec" stroke="#d1b79b" stroke-width="5" filter="url(#shadow)"/>
-  <rect x="13" y="13" width="154" height="194" fill="${light}"/>
-  <path d="M30 170Q80 80 135 155" stroke="${wine}" stroke-width="8" fill="none" opacity=".65"/>
-  <g fill="#8b3340"><circle cx="74" cy="80" r="17"/><circle cx="105" cy="57" r="13"/><circle cx="128" cy="92" r="16"/><circle cx="50" cy="112" r="12"/></g>
-  <path d="M88 80L82 165M110 61L112 160M50 112L72 170" stroke="#68704d" stroke-width="5"/>
- </g>
- <g transform="translate(390 1300) rotate(-2)"><path d="M0 0H330L322 66H-8Z" fill="${wine}"/><text x="18" y="43" fill="#f7e9d7" font-family="Georgia,serif" font-size="25" letter-spacing="5">PINVORA  ·  SAVE THIS</text></g>
- <rect width="1000" height="1500" filter="url(#grain)" opacity=".22"/>
+ <path d="M130 330L360 330 350 385 120 385Z" fill="#e4cba8" opacity=".85" transform="rotate(-4 240 350)"/>
+ <g transform="translate(630 1140) rotate(3)" filter="url(#shadow)"><path d="M0 0L230 8 215 220 8 210Z" fill="#fff8ed"/><path d="M16 18L212 26 198 194 20 188Z" fill="#dfcbb2"/><path d="M30 150L85 92 124 132 162 76 190 154Z" fill="#a98d72"/><path d="M30 150L85 92 124 132 162 76 190 154Z" fill="${ink}" opacity=".35"/><text x="27" y="178" font-family="Georgia" font-size="16" fill="${wine}">FIELD NOTES</text></g>
+ <path d="M110 1285Q220 1275 330 1288T550 1285T770 1290T900 1282L895 1350Q790 1340 680 1350T460 1344T240 1350T105 1342Z" fill="${paper}" filter="url(#paperEdge)"/>
+ <text x="130" y="1330" font-family="Georgia,serif" font-size="25" letter-spacing="7" fill="${wine}">PINVORA  /  SAVE FOR LATER</text>
  </svg>`;
  return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
 }
