@@ -387,3 +387,10 @@ main{width:min(1500px,calc(100% - 88px))!important;padding:45px 0 50px!important
  .workScreen .sectionHeading{padding:13px 16px 15px}
  .genreChoices button,.styleChoices button,.countChoices button,.typeChoices button{min-height:42px}
 }
+
+
+/* Keep the page canvas plain white; scrapbook texture stays on paper components */
+.app{
+  background-color:#fff!important;
+  background-image:none!important;
+}
