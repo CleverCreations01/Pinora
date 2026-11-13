@@ -1,4 +1,4 @@
-const CACHE_NAME = "pinvora-shell-v3";
+const CACHE_NAME = "pinvora-shell-v4";
 const APP_SHELL = ["/", "/manifest.webmanifest", "/icon.svg"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)));
@@ -10,8 +10,13 @@ self.addEventListener("activate", event => {
 });
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
+  const requestUrl = new URL(event.request.url);
+  if (requestUrl.pathname.startsWith("/api/")) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
   event.respondWith(fetch(event.request).then(response => {
-    if (response && response.ok && new URL(event.request.url).origin === self.location.origin) {
+    if (response && response.ok && requestUrl.origin === self.location.origin) {
       const copy = response.clone();
       caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
     }
