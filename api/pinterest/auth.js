@@ -3,20 +3,24 @@ import { randomBytes } from "node:crypto";
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("Referrer-Policy", "no-referrer");
   if (req.method !== "GET") return res.status(405).send("Method not allowed");
 
   const { PINTEREST_APP_ID, PINTEREST_REDIRECT_URI } = process.env;
   if (!PINTEREST_APP_ID || !PINTEREST_REDIRECT_URI) {
-    return res.status(503).send("Pinterest app credentials are not configured. Add the app ID and registered redirect URI in Vercel.");
+    return res.status(503).send("Pinterest app credentials are not configured.");
   }
 
   const environment = req.query.environment === "production" ? "production" : "sandbox";
   const state = randomBytes(32).toString("hex");
+  const session = randomBytes(32).toString("hex");
   const secure = req.headers["x-forwarded-proto"] === "https" || !String(req.headers.host || "").includes("localhost");
+  const secureFlag = secure ? "; Secure" : "";
 
   res.setHeader("Set-Cookie", [
-    `pinterest_oauth_state=${state}; HttpOnly; SameSite=Lax; Path=/; Max-Age=600${secure ? "; Secure" : ""}`,
-    `pinterest_oauth_environment=${environment}; HttpOnly; SameSite=Lax; Path=/; Max-Age=600${secure ? "; Secure" : ""}`
+    `pinvora_session=${session}; HttpOnly; SameSite=Lax; Path=/; Max-Age=31536000${secureFlag}`,
+    `pinterest_oauth_state=${state}; HttpOnly; SameSite=Lax; Path=/; Max-Age=600${secureFlag}`,
+    `pinterest_oauth_environment=${environment}; HttpOnly; SameSite=Lax; Path=/; Max-Age=600${secureFlag}`
   ]);
 
   const url = new URL("https://www.pinterest.com/oauth/");
