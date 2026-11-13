@@ -108,11 +108,55 @@ function makeGraphic(pin){
  return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
 }
 function addAmazonTag(url,tag){try{const u=new URL(url);if(!/amazon\.com$/i.test(u.hostname.replace(/^www\./,""))&&!/amazon\.com$/i.test(u.hostname))return url;if(tag)u.searchParams.set("tag",tag);return u.toString()}catch{return url}}
+function parseAmazonCsv(text){
+ const rows=[];let row=[],cell="",quoted=false;
+ for(let i=0;i<text.length;i++){const ch=text[i],next=text[i+1];
+  if(ch==='"'&&quoted&&next==='"'){cell+='"';i++}
+  else if(ch==='"'){quoted=!quoted}
+  else if(ch===","&&!quoted){row.push(cell);cell=""}
+  else if((ch==="\n"||ch==="\r")&&!quoted){if(ch==="\r"&&next==="\n")i++;row.push(cell);if(row.some(v=>v.trim()))rows.push(row);row=[];cell=""}
+  else cell+=ch;
+ }
+ row.push(cell);if(row.some(v=>v.trim()))rows.push(row);return rows;
+}
+async function readZipCsv(file){
+ const buf=await file.arrayBuffer(),view=new DataView(buf),bytes=new Uint8Array(buf);
+ let eocd=-1;for(let i=bytes.length-22;i>=Math.max(0,bytes.length-65557);i--){if(view.getUint32(i,true)===0x06054b50){eocd=i;break}}
+ if(eocd<0)throw new Error("This ZIP file could not be read.");
+ const count=view.getUint16(eocd+10,true);let offset=view.getUint32(eocd+16,true),out=[];
+ for(let n=0;n<count;n++){
+  if(view.getUint32(offset,true)!==0x02014b50)break;
+  const method=view.getUint16(offset+10,true),compressed=view.getUint32(offset+20,true),nameLen=view.getUint16(offset+28,true),extraLen=view.getUint16(offset+30,true),commentLen=view.getUint16(offset+32,true),local=view.getUint32(offset+42,true);
+  const name=new TextDecoder().decode(bytes.slice(offset+46,offset+46+nameLen));
+  offset+=46+nameLen+extraLen+commentLen;
+  if(!name.toLowerCase().endsWith(".csv"))continue;
+  const localName=view.getUint16(local+26,true),localExtra=view.getUint16(local+28,true),start=local+30+localName+localExtra,compressedData=bytes.slice(start,start+compressed);
+  let data;
+  if(method===0)data=compressedData;
+  else if(method===8&&typeof DecompressionStream!=="undefined"){const stream=new Blob([compressedData]).stream().pipeThrough(new DecompressionStream("deflate-raw"));data=new Uint8Array(await new Response(stream).arrayBuffer())}
+  else throw new Error("ZIP compression is not supported by this browser. Extract the CSV and upload it directly.");
+  out.push({name,text:new TextDecoder("utf-8").decode(data)});
+ }
+ if(!out.length)throw new Error("No CSV file was found inside this ZIP.");
+ return out;
+}
+function amazonCategoryFromTitle(title){
+ const s=String(title||"").toLowerCase();
+ if(/mirror|wall art|vase|curtain|rug|lamp|pillow|throw|candle|decor|planter|clock|shelf|basket/.test(s))return "home decor";
+ if(/organ|storage|drawer|closet|pantry|cabinet|rack|bin|divider|holder|container/.test(s))return "home organisation";
+ return "home decor";
+}
+async function extractAmazonReportFiles(file){
+ if(file.name.toLowerCase().endsWith(".zip"))return readZipCsv(file);
+ if(file.name.toLowerCase().endsWith(".csv")||file.type.includes("csv"))return [{name:file.name,text:await file.text()}];
+ throw new Error("Upload an Amazon Associates CSV or ZIP report.");
+}
+
 function readSavedState(){try{return JSON.parse(localStorage.getItem("pinvora_workspace_v1")||"{}")}catch{return {}}}
 function App(){
  const [initial]=useState(readSavedState);
  const [prompt,setPrompt]=useState(initial.prompt||""),[pins,setPins]=useState(Array.isArray(initial.pins)?initial.pins:[]),[tab,setTab]=useState("home"),[count,setCount]=useState(10),[campaignType,setCampaignType]=useState("mix"),[genre,setGenre]=useState(initial.genre||"home decor"),[associateTag,setAssociateTag]=useState(initial.associateTag||"");
- const [products,setProducts]=useState(Array.isArray(initial.products)?initial.products:[]),[productName,setProductName]=useState(""),[productUrl,setProductUrl]=useState(""),[productCategory,setProductCategory]=useState("home decor"),[bulkProducts,setBulkProducts]=useState(""),[productStatus,setProductStatus]=useState("");
+ const [products,setProducts]=useState(Array.isArray(initial.products)?initial.products:[]),[productName,setProductName]=useState(""),[productUrl,setProductUrl]=useState(""),[productCategory,setProductCategory]=useState("home decor"),[bulkProducts,setBulkProducts]=useState(""),[productStatus,setProductStatus]=useState(""),[amazonReportStatus,setAmazonReportStatus]=useState("No Amazon report imported in this session.");
  const [selected,setSelected]=useState(initial.selected||{}),[open,setOpen]=useState({}),[status,setStatus]=useState("Your ideas are saved on this device."),[recentTitles,setRecentTitles]=useState(Array.isArray(initial.recentTitles)?initial.recentTitles:[]);
  const [pinterestBoards,setPinterestBoards]=useState([]),[pinterestStatus,setPinterestStatus]=useState("Connect the Sandbox account to begin the Standard-access demo."),[pinterestConnected,setPinterestConnected]=useState(false),[sandboxConnected,setSandboxConnected]=useState(false),[productionConnected,setProductionConnected]=useState(false),[boardName,setBoardName]=useState("PINVORA API Demo Board"),[busy,setBusy]=useState(false),[selectedBoardId,setSelectedBoardId]=useState(""),[demoPinTitle,setDemoPinTitle]=useState("A Calm, Warm Home Decor Inspiration"),[demoPinDescription,setDemoPinDescription]=useState("A simple Pinterest API demonstration created with PINVORA Sandbox."),[demoImageUrl,setDemoImageUrl]=useState("https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1000&auto=format&fit=crop&q=85"),[demoPinResult,setDemoPinResult]=useState("");
  useEffect(()=>{let active=true;Promise.all(["sandbox","production"].map(environment=>fetch("/api/pinterest/status?environment="+environment).then(r=>r.json()).catch(()=>({connected:false,environment})))).then(results=>{if(!active)return;const sandbox=results.find(x=>x.environment==="sandbox");const production=results.find(x=>x.environment==="production");setSandboxConnected(Boolean(sandbox?.connected));setProductionConnected(Boolean(production?.connected));setPinterestConnected(Boolean(sandbox?.connected));setPinterestStatus(sandbox?.connected?"Sandbox connected. Load boards and create a demo board below.":"Sandbox not connected. Connect it to run the demo.");});return()=>{active=false}},[]);
@@ -140,6 +184,35 @@ function App(){
   }
   setProductStatus(added+" product(s) imported"+(invalid?", "+invalid+" invalid or unsupported line(s) skipped.":".")); 
  }
+
+ async function importAmazonReport(file){
+  if(!file)return;
+  setAmazonReportStatus("Reading Amazon report…");
+  try{
+   const files=await extractAmazonReportFiles(file),found=[];
+   for(const f of files){
+    const rows=parseAmazonCsv(f.text);if(!rows.length)continue;
+    const header=rows[0].map(x=>x.trim().toLowerCase());
+    const titleIndex=header.findIndex(x=>["product title","title","product name","item name"].includes(x));
+    const asinIndex=header.findIndex(x=>x==="asin"||x.includes("asin"));
+    const urlIndex=header.findIndex(x=>["product url","link","url","special link"].includes(x));
+    if(asinIndex<0&&urlIndex<0)continue;
+    for(const row of rows.slice(1)){
+     const title=titleIndex>=0?String(row[titleIndex]||"").trim():"";
+     const asin=asinIndex>=0?String(row[asinIndex]||"").trim().toUpperCase():"";
+     const rawUrl=urlIndex>=0?String(row[urlIndex]||"").trim():"";
+     if(!/^[A-Z0-9]{10}$/.test(asin)&&!/^https:\/\/(www\.)?amazon\.com\//i.test(rawUrl))continue;
+     if(!title||title==="-"||title.toLowerCase()==="other")continue;
+     const url=rawUrl?addAmazonTag(rawUrl,associateTag):(associateTag?"https://www.amazon.com/dp/"+asin+"?tag="+encodeURIComponent(associateTag):"https://www.amazon.com/dp/"+asin);
+     found.push({id:asin||("report"+Date.now()+Math.random().toString(36).slice(2,7)),name:title,url,asin,category:amazonCategoryFromTitle(title),addedAt:new Date().toISOString(),source:"Amazon Associates report",reportFile:f.name,linkStatus:associateTag?"tag-added":"tag-not-configured"});
+    }
+   }
+   const unique=Array.from(new Map(found.map(p=>[p.asin||p.url,p])).values());
+   if(!unique.length){setAmazonReportStatus("No identifiable product rows found. This report may contain only summary rows (for example, ASIN “Other”). Try the Orders Report or a Linked Products report with product-level rows.");return}
+   setProducts(prev=>{const seen=new Set(prev.map(p=>p.asin||p.url));const fresh=unique.filter(p=>!seen.has(p.asin||p.url));setAmazonReportStatus(fresh.length+" new product(s) imported from "+files.length+" report file(s); "+(unique.length-fresh.length)+" duplicates skipped. "+(associateTag?"Your tracking ID was attached to generated product URLs.":"Add your Associates tracking ID before using these links."));return [...fresh,...prev]});
+  }catch(e){setAmazonReportStatus(e.message||"Could not import this report.");}
+ }
+
  function createProductCampaign(product){
   const drafts=makePins(product.name,5,"affiliate",recentTitles.concat(pins.map(p=>p.title)),product.category||"home decor").map((p,i)=>({...p,id:Date.now()+i,productName:product.name,productUrl:addAmazonTag(product.url,associateTag),pinType:"affiliate",board:product.category||p.board,description:"Discover "+product.name+". Save this product idea for later and explore the details through the linked product page. As an Amazon Associate I earn from qualifying purchases.",keywords:[product.name,product.category,"Amazon finds","shopping ideas","product inspiration"].join(", "),imagePrompt:"Create an original premium Pinterest lifestyle image inspired by the product category "+product.category+". Product: "+product.name+". Show a tasteful, realistic editorial setting; do not invent brand marks, packaging details, specifications or claim this is an exact product photograph."}));
   setPins(prev=>[...drafts,...prev]);setSelected(prev=>({...prev,...Object.fromEntries(drafts.map(p=>[p.id,true]))}));setRecentTitles(prev=>[...drafts.map(p=>p.title),...prev].slice(0,80));setTab("review");setStatus("Created 5 product-led drafts for "+product.name+". Add an accurate product image before publishing.");
@@ -171,6 +244,15 @@ function App(){
      <button className="wineBtn" type="button" onClick={()=>setProductStatus(associateTag?"Associates tracking ID saved in this device's PINVORA workspace.":"Enter your Amazon tracking ID first.")}>Save Associates ID</button>
      <p className="helperText">{associateTag?"Tracking ID configured: "+associateTag:"No tracking ID configured yet."}</p>
      <a className="amazonAccountLink" href="https://affiliate-program.amazon.com/" target="_blank" rel="noreferrer">Open Amazon Associates Central ↗</a>
+    </div>
+    <div className="paperCard createCard amazonImportCard">
+     <h2 className="vaultTitle">Import from Amazon Associates</h2>
+     <p className="vaultHint">No Creators API or Amazon password needed. Download an account report yourself, then upload its CSV or ZIP here. PINVORA reads product titles and ASINs that Amazon includes in the report; it cannot retrieve products Amazon does not expose in that export.</p>
+     <a className="amazonAccountLink" href="https://affiliate-program.amazon.com/home/reports" target="_blank" rel="noreferrer">Open your Amazon Associates Reports ↗</a>
+     <label className="fieldLabel">Upload Amazon Associates report (.CSV or .ZIP)</label>
+     <input className="editField amazonReportFile" type="file" accept=".csv,.zip,text/csv,application/zip" onChange={e=>{const f=e.target.files?.[0];if(f)importAmazonReport(f);e.target.value="";}}/>
+     <p className="helperText">{amazonReportStatus}</p>
+     <p className="helperText">Privacy: the report is processed in your browser and saved product records stay in this device's existing PINVORA workspace. No Amazon password or OTP is requested.</p>
     </div>
     <div className="paperCard createCard">
      <h2 className="vaultTitle">Add a product</h2>
