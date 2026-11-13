@@ -10,7 +10,7 @@ const environmentName = value => value === "sandbox" ? "sandbox" : "production";
 
 export function readPinterestSession(req) {
   const cookies = req.headers.cookie || "";
-  const match = cookies.match(/(?:^|;\\s*)pinvora_session=([a-f0-9]{64})(?:;|$)/);
+  const match = cookies.match(/(?:^|;\s*)pinvora_session=([a-f0-9]{64})(?:;|$)/);
   return match ? match[1] : null;
 }
 function requireSession(sessionId) {
