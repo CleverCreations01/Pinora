@@ -163,6 +163,15 @@ function App(){
    </section>}
    {tab==="products"&&<section className="workScreen">
     <div className="sectionHeading"><h1>Product Vault</h1><p>Build your product catalogue, then turn any item into a Pinterest campaign.</p></div>
+    <div className="paperCard createCard amazonConnectCard">
+     <h2 className="vaultTitle">Amazon Associates · United States</h2>
+     <p className="vaultHint">Your Associates account is linked through its tracking ID. Creators API product search is unavailable until Amazon grants your account access; you can still add your own product links and create tagged affiliate campaigns.</p>
+     <label className="fieldLabel">Your Amazon tracking ID</label>
+     <input className="editField" value={associateTag} onChange={e=>setAssociateTag(e.target.value.trim())} placeholder="yourstore-20"/>
+     <button className="wineBtn" type="button" onClick={()=>setProductStatus(associateTag?"Associates tracking ID saved in this device's PINVORA workspace.":"Enter your Amazon tracking ID first.")}>Save Associates ID</button>
+     <p className="helperText">{associateTag?"Tracking ID configured: "+associateTag:"No tracking ID configured yet."}</p>
+     <a className="amazonAccountLink" href="https://affiliate-program.amazon.com/" target="_blank" rel="noreferrer">Open Amazon Associates Central ↗</a>
+    </div>
     <div className="paperCard createCard">
      <h2 className="vaultTitle">Add a product</h2>
      <label className="fieldLabel">Product name</label><input className="editField" value={productName} onChange={e=>setProductName(e.target.value)} placeholder="e.g. Woven storage basket"/>
