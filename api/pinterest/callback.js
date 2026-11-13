@@ -90,9 +90,7 @@ export default async function handler(req, res) {
 
     await savePinterestTokens(tokens);
 
-    return res.status(200).send(
-      "Pinterest connected. Your credentials were encrypted and saved in private storage. You can return to PINVORA."
-    );
+    return res.redirect(302, "https://pinora-six.vercel.app/?pinterest=connected");
   } catch {
     return res.status(502).send("Could not complete secure Pinterest connection. Please try again.");
   }
