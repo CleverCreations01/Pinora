@@ -1,4 +1,4 @@
-const AMAZON_HOST = /(^|\\.)amazon\\.com$/i;
+const AMAZON_HOST = /^(?:www\\.)?(?:[a-z0-9-]+\\.)*amazon\\.com$/i;
 const DISCLOSURE = "As an Amazon Associate I earn from qualifying purchases.";
 
 export default async function handler(req, res) {
@@ -26,19 +26,15 @@ export default async function handler(req, res) {
   if (image.protocol !== "https:") return res.status(400).json({ error: "Image URL must use HTTPS." });
 
   let destination;
-  if (link) {
-    try { destination = new URL(link); } catch { return res.status(400).json({ error: "Amazon destination URL is invalid." }); }
-    if (destination.protocol !== "https:" || !AMAZON_HOST.test(destination.hostname)) {
-      return res.status(400).json({ error: "Affiliate destination must be an HTTPS Amazon.com URL." });
-    }
-  } else {
-    return res.status(400).json({ error: "An Amazon.com affiliate destination is required." });
+  try { destination = new URL(link); } catch { return res.status(400).json({ error: "Amazon destination URL is invalid." }); }
+  if (destination.protocol !== "https:" || !AMAZON_HOST.test(destination.hostname)) {
+    return res.status(400).json({ error: "Affiliate destination must be an HTTPS Amazon.com URL." });
   }
 
   const cleanDescription = String(description || "").trim();
   const finalDescription = cleanDescription.includes(DISCLOSURE)
     ? cleanDescription
-    : [cleanDescription, DISCLOSURE].filter(Boolean).join("\\n\\n");
+    : [cleanDescription, DISCLOSURE].filter(Boolean).join("\n\n");
 
   try {
     const response = await fetch("https://api-sandbox.pinterest.com/v5/pins", {
