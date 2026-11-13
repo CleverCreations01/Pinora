@@ -74,7 +74,7 @@ export default async function handler(req, res) {
       return res.redirect(302, "/?pinterest=error&environment=" + environment + "&reason=token_exchange_failed");
     }
 
-    const granted = new Set(String(tokens.scope || "").split(/[\\s,]+/).filter(Boolean));
+    const granted = new Set(String(tokens.scope || "").split(/[\s,]+/).filter(Boolean));
     const missing = ["boards:read", "pins:write"].filter(scope => !granted.has(scope));
     if (missing.length) {
       return res.redirect(302, "/?pinterest=error&environment=" + environment + "&reason=required_scope_missing");
