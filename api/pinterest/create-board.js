@@ -1,8 +1,15 @@
-import { getPinterestTokens, pinterestApiBase } from "./_storage.js";
+import { getPinterestTokens, pinterestApiBase, readPinterestSession } from "./_storage.js";
 
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
+
+  const sessionId = readPinterestSession(req);
+  if (!sessionId) return res.status(401).json({ error: "Connect Pinterest in this browser session first." });
+
+  const origin = req.headers.origin;
+  const host = req.headers["x-forwarded-host"] || req.headers.host;
+  if (origin && host && new URL(origin).host !== host) return res.status(403).json({ error: "Cross-origin Pinterest actions are not allowed." });
 
   const environment = req.body?.environment === "production" ? "production" : "sandbox";
   if (environment === "production" && process.env.PINTEREST_PRODUCTION_ENABLED !== "true") {
@@ -15,7 +22,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const tokens = await getPinterestTokens(environment);
+    const tokens = await getPinterestTokens(environment, sessionId);
     if (!tokens?.access_token) {
       return res.status(401).json({ error: `Pinterest ${environment} account is not connected.` });
     }
