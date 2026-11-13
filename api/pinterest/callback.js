@@ -3,7 +3,7 @@ import { readPinterestSession, savePinterestTokens } from "./_storage.js";
 
 function readCookie(req, name) {
   const cookies = req.headers.cookie || "";
-  const match = cookies.match(new RegExp(`(?:^|;\\\\s*)${name}=([^;]*)`));
+  const match = cookies.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`));
   return match ? decodeURIComponent(match[1]) : null;
 }
 export default async function handler(req, res) {
