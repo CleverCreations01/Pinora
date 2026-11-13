@@ -14,7 +14,8 @@
     "@capacitor/core": "^7.4.3",
     "vite": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "@vercel/blob": "^2.0.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^7.4.3"
