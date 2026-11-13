@@ -599,3 +599,5 @@ body{background:#f2e6d7!important}
 .amazonImportCard{border:1px solid rgba(100,29,41,.24);background:linear-gradient(135deg,#fbf4e9,#f3e6d7)}
 .amazonReportFile{padding:12px;background:#fffaf3}
 .amazonImportCard .helperText{line-height:1.55}
+
+.amazonIdentityRow{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:14px 0;padding:15px 16px;background:#fffaf3;border:1px solid var(--line);border-radius:13px}.amazonIdentityRow>div{display:flex;flex-direction:column;gap:5px;min-width:0}.amazonIdentityRow b{color:var(--wineDark);font:600 14px "DM Sans",Arial,sans-serif}.amazonIdentityRow small{color:var(--muted);font:12px "DM Sans",Arial,sans-serif;overflow-wrap:anywhere}.amazonIdentityRow button{flex-shrink:0}@media(max-width:520px){.amazonIdentityRow{align-items:flex-start;flex-direction:column}.amazonIdentityRow button{width:100%}}
