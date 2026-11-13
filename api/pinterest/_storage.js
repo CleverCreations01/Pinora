@@ -1,4 +1,4 @@
-import { list, get, put } from "@vercel/blob";
+import { list, get, put, del } from "@vercel/blob";
 import { createCipheriv, createDecipheriv, randomBytes } from "node:crypto";
 
 const key = () => {
@@ -36,6 +36,12 @@ function unseal(value) {
 async function findUrl(path) {
   const result = await list({ prefix: path, limit: 1 });
   return result.blobs?.[0]?.url || null;
+}
+
+export async function deletePinterestTokens(environment = "production", sessionId) {
+  const url = await findUrl(tokenPath(sessionId, environment));
+  if (url) await del(url);
+  return Boolean(url);
 }
 function tokenPath(sessionId, environment) {
   return "pinterest/sessions/" + requireSession(sessionId) + "/" + environmentName(environment) + "/private-tokens.json";
