@@ -592,3 +592,5 @@ body{background:#f2e6d7!important}
 .vaultProductInfo a{text-decoration:underline}
 .vaultRemove{width:34px;height:34px;flex:0 0 34px;border:1px solid var(--line);border-radius:50%;background:#f8eee2;color:var(--wine);font-size:22px}
 @media(max-width:600px){.vaultProduct{gap:8px;padding:11px}.vaultProductIcon{width:35px;height:35px;flex-basis:35px}.vaultProduct .wineBtn{padding:9px 11px;font-size:11px}.vaultProductInfo b{font-size:12px}.vaultProductInfo small,.vaultProductInfo a{font-size:10px}.vaultRemove{width:28px;height:28px;flex-basis:28px}}
+
+.amazonConnectCard{margin-bottom:16px}.amazonAccountLink{display:inline-block;margin-top:12px;color:var(--wine);font:600 13px "DM Sans",Arial,sans-serif;text-decoration:underline}
