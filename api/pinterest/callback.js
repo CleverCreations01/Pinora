@@ -13,16 +13,17 @@ export default async function handler(req, res) {
   const { code, state, error } = req.query;
   const savedState = readCookie(req, "pinterest_oauth_state");
   const environment = readCookie(req, "pinterest_oauth_environment") === "production" ? "production" : "sandbox";
+  const secureCookie = req.headers["x-forwarded-proto"] === "https" || !String(req.headers.host || "").includes("localhost");
   res.setHeader("Set-Cookie", [
-    "pinterest_oauth_state=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0",
-    "pinterest_oauth_environment=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0"
+    `pinterest_oauth_state=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0${secureCookie ? "; Secure" : ""}`,
+    `pinterest_oauth_environment=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0${secureCookie ? "; Secure" : ""}`
   ]);
-  if (error) return res.redirect(302, `/?pinterest=denied&environment=${environment}`);
+  if (error) return res.redirect(302, `/?pinterest=denied&environment=${environment}&reason=${encodeURIComponent(String(error).slice(0, 80))}`);
   if (typeof code !== "string" || typeof state !== "string" || !savedState || state.length !== savedState.length || !timingSafeEqual(Buffer.from(state), Buffer.from(savedState))) {
-    return res.status(400).send("Invalid authorization state. Please reconnect.");
+    return res.redirect(302, `/?pinterest=error&environment=${environment}&reason=state_check_failed`);
   }
   const { PINTEREST_APP_ID, PINTEREST_APP_SECRET, PINTEREST_REDIRECT_URI } = process.env;
-  if (!PINTEREST_APP_ID || !PINTEREST_APP_SECRET || !PINTEREST_REDIRECT_URI) return res.status(500).send("Pinterest server configuration is incomplete.");
+  if (!PINTEREST_APP_ID || !PINTEREST_APP_SECRET || !PINTEREST_REDIRECT_URI) return res.redirect(302, `/?pinterest=error&environment=${environment}&reason=server_configuration_incomplete`);
   try {
     const base = environment === "sandbox" ? "https://api-sandbox.pinterest.com" : "https://api.pinterest.com";
     const credentials = Buffer.from(`${PINTEREST_APP_ID}:${PINTEREST_APP_SECRET}`).toString("base64");
@@ -33,11 +34,12 @@ export default async function handler(req, res) {
     });
     const tokens = await tokenResponse.json();
     if (!tokenResponse.ok || typeof tokens.access_token !== "string" || typeof tokens.expires_in !== "number") {
-      return res.status(502).send("Pinterest token exchange failed. Please check the app configuration and reconnect.");
+      return res.redirect(302, `/?pinterest=error&environment=${environment}&reason=token_exchange_failed&status=${tokenResponse.status}`);
     }
     await savePinterestTokens(tokens, environment);
     return res.redirect(302, `/?pinterest=connected&environment=${environment}`);
-  } catch {
-    return res.status(502).send("Could not complete secure Pinterest connection. Please try again.");
+  } catch (err) {
+    console.error("Pinterest OAuth callback failed:", err?.message || "unknown error");
+    return res.redirect(302, `/?pinterest=error&environment=${environment}&reason=secure_token_storage_failed`);
   }
 }
