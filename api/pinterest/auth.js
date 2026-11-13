@@ -3,9 +3,13 @@ export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (req.method !== "GET") return res.status(405).send("Method not allowed");
   const { PINTEREST_APP_ID, PINTEREST_REDIRECT_URI } = process.env;
-  if (!PINTEREST_APP_ID || !PINTEREST_REDIRECT_URI) return res.status(500).send("Add PINTEREST_APP_ID and PINTEREST_REDIRECT_URI in Vercel.");
+  if (!PINTEREST_APP_ID || !PINTEREST_REDIRECT_URI) return res.status(500).send("Pinterest app credentials are not configured.");
+  const environment = req.query.environment === "production" ? "production" : "sandbox";
   const state = randomBytes(24).toString("hex");
-  res.setHeader("Set-Cookie", `pinterest_oauth_state=${state}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=600`);
+  res.setHeader("Set-Cookie", [
+    `pinterest_oauth_state=${state}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=600`,
+    `pinterest_oauth_environment=${environment}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=600`
+  ]);
   const url = new URL("https://www.pinterest.com/oauth/");
   url.searchParams.set("client_id", PINTEREST_APP_ID);
   url.searchParams.set("redirect_uri", PINTEREST_REDIRECT_URI);
