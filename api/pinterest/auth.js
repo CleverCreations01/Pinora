@@ -23,7 +23,7 @@ export default async function handler(req, res) {
   url.searchParams.set("client_id", PINTEREST_APP_ID);
   url.searchParams.set("redirect_uri", PINTEREST_REDIRECT_URI);
   url.searchParams.set("response_type", "code");
-  url.searchParams.set("scope", "boards:read,boards:write,pins:read,pins:write");
+  url.searchParams.set("scope", "boards:read,boards:write,pins:write");
   url.searchParams.set("state", state);
   return res.redirect(302, url.toString());
 }
