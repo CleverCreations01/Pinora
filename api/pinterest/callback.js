@@ -50,7 +50,7 @@ export default async function handler(req, res) {
   if (
     !PINTEREST_APP_ID ||
     !PINTEREST_APP_SECRET ||
-    !PINTEREST_REDIRECT_URI ||
+    !PINTEREST_REDIRECT_URI
   ) {
     return res.status(500).send("Server configuration is incomplete.");
   }
