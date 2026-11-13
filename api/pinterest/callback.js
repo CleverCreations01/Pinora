@@ -1,8 +1,5 @@
-import {
-  createCipheriv,
-  randomBytes,
-  timingSafeEqual
-} from "node:crypto";
+import { timingSafeEqual } from "node:crypto";
+import { savePinterestTokens } from "./_storage.js";
 
 function readCookie(req, name) {
   const cookies = req.headers.cookie || "";
@@ -12,21 +9,6 @@ function readCookie(req, name) {
   return match ? decodeURIComponent(match[1]) : null;
 }
 
-function encryptToken(value, key) {
-  if (!value) return null;
-  const iv = randomBytes(12);
-  const cipher = createCipheriv("aes-256-gcm", key, iv);
-  const encrypted = Buffer.concat([
-    cipher.update(value, "utf8"),
-    cipher.final()
-  ]);
-  const tag = cipher.getAuthTag();
-  return [
-    iv.toString("base64url"),
-    tag.toString("base64url"),
-    encrypted.toString("base64url")
-  ].join(".");
-}
 
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
@@ -63,24 +45,14 @@ export default async function handler(req, res) {
     PINTEREST_APP_ID,
     PINTEREST_APP_SECRET,
     PINTEREST_REDIRECT_URI,
-    SUPABASE_URL,
-    SUPABASE_SECRET_KEY,
-    TOKEN_ENCRYPTION_KEY
   } = process.env;
 
   if (
     !PINTEREST_APP_ID ||
     !PINTEREST_APP_SECRET ||
     !PINTEREST_REDIRECT_URI ||
-    !SUPABASE_URL ||
-    !SUPABASE_SECRET_KEY ||
-    !TOKEN_ENCRYPTION_KEY
   ) {
     return res.status(500).send("Server configuration is incomplete.");
-  }
-
-  if (!/^[a-fA-F0-9]{64}$/.test(TOKEN_ENCRYPTION_KEY)) {
-    return res.status(500).send("Token encryption key must be 64 hexadecimal characters.");
   }
 
   try {
@@ -116,38 +88,10 @@ export default async function handler(req, res) {
       return res.status(502).send("Pinterest returned an unexpected token response.");
     }
 
-    const encryptionKey = Buffer.from(TOKEN_ENCRYPTION_KEY, "hex");
-    const row = {
-      id: 1,
-      access_token: encryptToken(tokens.access_token, encryptionKey),
-      refresh_token: encryptToken(
-        typeof tokens.refresh_token === "string" ? tokens.refresh_token : null,
-        encryptionKey
-      ),
-      expires_at: new Date(Date.now() + tokens.expires_in * 1000).toISOString(),
-      updated_at: new Date().toISOString()
-    };
-
-    const supabaseUrl = SUPABASE_URL.replace(/\/+$/, "");
-    const saveResponse = await fetch(
-      `${supabaseUrl}/rest/v1/pinterest_tokens?on_conflict=id`,
-      {
-        method: "POST",
-        headers: {
-          apikey: SUPABASE_SECRET_KEY,
-          "Content-Type": "application/json",
-          Prefer: "resolution=merge-duplicates,return=minimal"
-        },
-        body: JSON.stringify(row)
-      }
-    );
-
-    if (!saveResponse.ok) {
-      return res.status(502).send("Pinterest connected, but secure token storage failed. Publishing is disabled.");
-    }
+    await savePinterestTokens(tokens);
 
     return res.status(200).send(
-      "Pinterest connected and tokens were encrypted before storage. Publishing is still disabled until the connection is verified."
+      "Pinterest connected. Your credentials were encrypted and saved in private storage. You can return to PINVORA."
     );
   } catch {
     return res.status(502).send("Could not complete secure Pinterest connection. Please try again.");
