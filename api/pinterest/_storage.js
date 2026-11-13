@@ -6,7 +6,19 @@ const key = () => {
   if (!/^[a-fA-F0-9]{64}$/.test(value)) throw new Error("TOKEN_ENCRYPTION_KEY must be 64 hex characters");
   return Buffer.from(value, "hex");
 };
-const environmentName = (value) => value === "sandbox" ? "sandbox" : "production";
+const environmentName = value => value === "sandbox" ? "sandbox" : "production";
+
+export function readPinterestSession(req) {
+  const cookies = req.headers.cookie || "";
+  const match = cookies.match(/(?:^|;\\s*)pinvora_session=([a-f0-9]{64})(?:;|$)/);
+  return match ? match[1] : null;
+}
+function requireSession(sessionId) {
+  if (typeof sessionId !== "string" || !/^[a-f0-9]{64}$/.test(sessionId)) {
+    throw new Error("A valid PINVORA browser session is required.");
+  }
+  return sessionId;
+}
 function seal(value) {
   if (!value) return null;
   const iv = randomBytes(12);
@@ -25,7 +37,12 @@ async function findUrl(path) {
   const result = await list({ prefix: path, limit: 1 });
   return result.blobs?.[0]?.url || null;
 }
-export async function savePinterestTokens(tokens, environment = "production") {
+function tokenPath(sessionId, environment) {
+  const session = requireSession(sessionId);
+  const env = environmentName(environment);
+  return `pinterest/sessions/${session}/${env}/private-tokens.json`;
+}
+export async function savePinterestTokens(tokens, environment = "production", sessionId) {
   const env = environmentName(environment);
   const payload = {
     access_token: seal(tokens.access_token),
@@ -34,18 +51,14 @@ export async function savePinterestTokens(tokens, environment = "production") {
     updated_at: new Date().toISOString(),
     environment: env
   };
-  const path = env === "production" ? "pinterest/production/private-tokens.json" : "pinterest/sandbox/private-tokens.json";
-  await put(path, JSON.stringify(payload), {
+  await put(tokenPath(sessionId, env), JSON.stringify(payload), {
     access: "private", addRandomSuffix: false, allowOverwrite: true,
     contentType: "application/json"
   });
 }
-export async function loadPinterestTokens(environment = "production") {
-  const env = environmentName(environment);
-  const path = env === "production" ? "pinterest/production/private-tokens.json" : "pinterest/sandbox/private-tokens.json";
-  let url = await findUrl(path);
-  // Read the legacy production token location without deleting or overwriting it.
-  if (!url && env === "production") url = await findUrl("pinterest/private-tokens.json");
+export async function loadPinterestTokens(environment = "production", sessionId) {
+  const path = tokenPath(sessionId, environment);
+  const url = await findUrl(path);
   if (!url) return null;
   const result = await get(url, { access: "private", useCache: false });
   if (!result || result.statusCode !== 200) return null;
@@ -54,12 +67,12 @@ export async function loadPinterestTokens(environment = "production") {
     access_token: unseal(payload.access_token),
     refresh_token: unseal(payload.refresh_token),
     expires_at: payload.expires_at,
-    environment: env
+    environment: environmentName(environment)
   };
 }
-export async function getPinterestTokens(environment = "production") {
+export async function getPinterestTokens(environment = "production", sessionId) {
   const env = environmentName(environment);
-  const tokens = await loadPinterestTokens(env);
+  const tokens = await loadPinterestTokens(env, sessionId);
   if (!tokens?.access_token) return null;
   const expires = Date.parse(tokens.expires_at || "");
   if (!tokens.refresh_token || !Number.isFinite(expires) || expires - Date.now() > 5 * 60 * 1000) return tokens;
@@ -73,7 +86,7 @@ export async function getPinterestTokens(environment = "production") {
   const refreshed = await response.json();
   if (!response.ok || !refreshed.access_token) throw new Error("Pinterest token refresh failed. Reconnect the account.");
   const next = { ...refreshed, refresh_token: refreshed.refresh_token || tokens.refresh_token };
-  await savePinterestTokens(next, env);
+  await savePinterestTokens(next, env, sessionId);
   return { access_token: next.access_token, refresh_token: next.refresh_token, expires_at: new Date(Date.now() + Number(next.expires_in || 0) * 1000).toISOString(), environment: env };
 }
 export function pinterestApiBase(environment = "production") {
