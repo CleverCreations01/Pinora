@@ -575,3 +575,20 @@ body{background:#f2e6d7!important}
   .refHeroTorn{min-height:245px}
   .paperCard,.createCard,.queueCard,.settingsCard,.emptyState{padding:17px}
 }
+
+/* Product Vault */
+.vaultTitle{margin:0 0 8px;color:var(--wineDark);font:600 22px "Lora",Georgia,serif}
+.bulkProductInput{min-height:150px;white-space:pre-wrap}
+.vaultHint{text-align:left;margin:4px 0 10px}
+.vaultHeader{display:flex;align-items:center;justify-content:space-between;margin:24px 4px 12px;color:var(--wineDark)}
+.vaultHeader h2{margin:0;font:600 24px "Lora",Georgia,serif}
+.vaultHeader span{padding:6px 12px;border-radius:18px;background:#ead8c6;color:var(--wine);font:600 12px "DM Sans",Arial,sans-serif}
+.vaultList{display:grid;gap:10px}
+.vaultProduct{display:flex;align-items:center;gap:14px;padding:16px;background:#fff9f0;border:1px solid var(--line);border-radius:16px}
+.vaultProductIcon{width:45px;height:45px;display:grid;place-items:center;flex:0 0 45px;border-radius:14px;background:#ead9c7;color:var(--wine);font-size:28px}
+.vaultProductInfo{display:flex;flex:1;min-width:0;flex-direction:column;gap:5px}
+.vaultProductInfo b{color:var(--wineDark);font:600 14px "DM Sans",Arial,sans-serif;overflow-wrap:anywhere}
+.vaultProductInfo small,.vaultProductInfo a{color:var(--muted);font:12px "DM Sans",Arial,sans-serif}
+.vaultProductInfo a{text-decoration:underline}
+.vaultRemove{width:34px;height:34px;flex:0 0 34px;border:1px solid var(--line);border-radius:50%;background:#f8eee2;color:var(--wine);font-size:22px}
+@media(max-width:600px){.vaultProduct{gap:8px;padding:11px}.vaultProductIcon{width:35px;height:35px;flex-basis:35px}.vaultProduct .wineBtn{padding:9px 11px;font-size:11px}.vaultProductInfo b{font-size:12px}.vaultProductInfo small,.vaultProductInfo a{font-size:10px}.vaultRemove{width:28px;height:28px;flex-basis:28px}}
