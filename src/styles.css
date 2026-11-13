@@ -607,3 +607,29 @@ body{background:#f2e6d7!important}
 .countChoices{grid-template-columns:repeat(3,minmax(0,1fr));}
 .typeChoices button:focus-visible,.countChoices button:focus-visible{outline:3px solid #a66a62;outline-offset:3px;}
 .typeChoices button[aria-pressed="true"],.countChoices button[aria-pressed="true"]{background:var(--wine);border:2px solid var(--wine);color:#fff3e6;box-shadow:0 2px 0 rgba(75,23,32,.18);}
+
+
+/* Campaign controls: make the selected state unmistakable and keep every option tappable. */
+.createCard .typeChoices,.createCard .countChoices{position:relative;z-index:8;isolation:isolate;display:grid;gap:10px;}
+.createCard .typeChoices{grid-template-columns:repeat(3,minmax(0,1fr));}
+.createCard .countChoices{grid-template-columns:repeat(3,minmax(0,1fr));}
+.createCard .typeChoices button,.createCard .countChoices button{position:relative;z-index:9;display:flex;align-items:center;justify-content:center;min-height:48px;pointer-events:auto!important;touch-action:manipulation;cursor:pointer;border:1px solid #c9ad8e!important;background:#fff8ed!important;color:#59242d!important;}
+.createCard .typeChoices button.selected,.createCard .countChoices button.selected,.createCard .typeChoices button[aria-pressed="true"],.createCard .countChoices button[aria-pressed="true"]{background:#64232d!important;color:#fff3e6!important;border:2px solid #64232d!important;box-shadow:0 3px 0 rgba(75,23,32,.18)!important;}
+.createCard:before,.createCard:after,.createCard .typeChoices:before,.createCard .typeChoices:after,.createCard .countChoices:before,.createCard .countChoices:after{pointer-events:none!important;}
+.homeDrafts{margin:30px 0 34px;padding:0 2px;}
+.homeDraftsHeading{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:0 0 16px;}
+.homeDraftsHeading h2{margin:5px 0 3px;color:var(--wineDark);font:600 30px "Lora",Georgia,serif;}
+.homeDraftsHeading h2 span{color:#a76b70;}
+.homeDraftsHeading p{margin:0;color:var(--muted);font:13px "DM Sans",Arial,sans-serif;}
+.homeDraftsHeading>button,.homeDraftBottom button{border:0;background:transparent;color:var(--wine);font:600 13px "DM Sans",Arial,sans-serif;white-space:nowrap;cursor:pointer;}
+.homeDraftList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;}
+.homeDraftCard{min-width:0;padding:17px 18px;background:#f8efe3;border:1px solid #e1cfb9;border-radius:16px;box-shadow:0 5px 15px rgba(86,55,38,.075);}
+.homeDraftTop,.homeDraftBottom{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.homeDraftEyebrow{color:#9a7560;font:600 9px "DM Sans",Arial,sans-serif;letter-spacing:.13em;}
+.homeDraftTop h3{margin:5px 0 0;color:var(--wineDark);font:600 17px "Lora",Georgia,serif;overflow-wrap:anywhere;}
+.draftPill{padding:5px 10px;border-radius:20px;background:#ead8c6;color:#6b3a3e;font:600 10px "DM Sans",Arial,sans-serif;}
+.homeDraftMeta{margin:10px 0 14px;color:#8a6b55;font:12px "DM Sans",Arial,sans-serif;}
+.homeDraftBottom{padding-top:11px;border-top:1px solid rgba(120,82,58,.18);}
+.homeDraftBottom small{color:var(--muted);font:11px "DM Sans",Arial,sans-serif;}
+.homeNewDraft{margin-top:14px;padding:11px 16px;border:1px dashed #b58c7a;border-radius:24px;background:transparent;color:var(--wine);font:600 13px "DM Sans",Arial,sans-serif;cursor:pointer;}
+@media(max-width:620px){.homeDraftList{grid-template-columns:1fr}.homeDraftsHeading h2{font-size:27px}.homeDraftCard{padding:15px}.homeDraftBottom small{font-size:10px}.createCard .typeChoices{grid-template-columns:1fr;}}
