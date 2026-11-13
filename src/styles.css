@@ -607,3 +607,51 @@ body{background:#f2e6d7!important}
 .countChoices{grid-template-columns:repeat(3,minmax(0,1fr));}
 .typeChoices button:focus-visible,.countChoices button:focus-visible{outline:3px solid #a66a62;outline-offset:3px;}
 .typeChoices button[aria-pressed="true"],.countChoices button[aria-pressed="true"]{background:var(--wine);border:2px solid var(--wine);color:#fff3e6;box-shadow:0 2px 0 rgba(75,23,32,.18);}
+
+
+/* Campaign controls: make the selected state unmistakable and keep every option tappable. */
+.createCard .typeChoices,.createCard .countChoices{position:relative;z-index:8;isolation:isolate;display:grid;gap:10px;}
+.createCard .typeChoices{grid-template-columns:repeat(3,minmax(0,1fr));}
+.createCard .countChoices{grid-template-columns:repeat(3,minmax(0,1fr));}
+.createCard .typeChoices button,.createCard .countChoices button{position:relative;z-index:9;display:flex;align-items:center;justify-content:center;min-height:48px;pointer-events:auto!important;touch-action:manipulation;cursor:pointer;border:1px solid #c9ad8e!important;background:#fff8ed!important;color:#59242d!important;}
+.createCard .typeChoices button.selected,.createCard .countChoices button.selected,.createCard .typeChoices button[aria-pressed="true"],.createCard .countChoices button[aria-pressed="true"]{background:#64232d!important;color:#fff3e6!important;border:2px solid #64232d!important;box-shadow:0 3px 0 rgba(75,23,32,.18)!important;}
+.createCard:before,.createCard:after,.createCard .typeChoices:before,.createCard .typeChoices:after,.createCard .countChoices:before,.createCard .countChoices:after{pointer-events:none!important;}
+.homeDrafts{margin:30px 0 34px;padding:0 2px;}
+.homeDraftsHeading{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:0 0 16px;}
+.homeDraftsHeading h2{margin:5px 0 3px;color:var(--wineDark);font:600 30px "Lora",Georgia,serif;}
+.homeDraftsHeading h2 span{color:#a76b70;}
+.homeDraftsHeading p{margin:0;color:var(--muted);font:13px "DM Sans",Arial,sans-serif;}
+.homeDraftsHeading>button,.homeDraftBottom button{border:0;background:transparent;color:var(--wine);font:600 13px "DM Sans",Arial,sans-serif;white-space:nowrap;cursor:pointer;}
+.homeDraftList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;}
+.homeDraftCard{min-width:0;padding:17px 18px;background:#f8efe3;border:1px solid #e1cfb9;border-radius:16px;box-shadow:0 5px 15px rgba(86,55,38,.075);}
+.homeDraftTop,.homeDraftBottom{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.homeDraftEyebrow{color:#9a7560;font:600 9px "DM Sans",Arial,sans-serif;letter-spacing:.13em;}
+.homeDraftTop h3{margin:5px 0 0;color:var(--wineDark);font:600 17px "Lora",Georgia,serif;overflow-wrap:anywhere;}
+.draftPill{padding:5px 10px;border-radius:20px;background:#ead8c6;color:#6b3a3e;font:600 10px "DM Sans",Arial,sans-serif;}
+.homeDraftMeta{margin:10px 0 14px;color:#8a6b55;font:12px "DM Sans",Arial,sans-serif;}
+.homeDraftBottom{padding-top:11px;border-top:1px solid rgba(120,82,58,.18);}
+.homeDraftBottom small{color:var(--muted);font:11px "DM Sans",Arial,sans-serif;}
+.homeNewDraft{margin-top:14px;padding:11px 16px;border:1px dashed #b58c7a;border-radius:24px;background:transparent;color:var(--wine);font:600 13px "DM Sans",Arial,sans-serif;cursor:pointer;}
+@media(max-width:620px){.homeDraftList{grid-template-columns:1fr}.homeDraftsHeading h2{font-size:27px}.homeDraftCard{padding:15px}.homeDraftBottom small{font-size:10px}.createCard .typeChoices{grid-template-columns:1fr;}}
+
+
+/* Dedicated campaign draft collections and reliable bulk selection */
+.reviewBulkActions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.reviewBulkActions button:first-child{padding:9px 15px;border:1px solid #b98d7c;border-radius:22px;background:#fff8ed;color:#64232d;font-weight:700}
+.reviewBulkActions button:first-child:hover{background:#64232d;color:#fff3e6}
+.draftCollectionSummary{display:flex;align-items:center;justify-content:space-between;margin:0 0 16px;padding:14px 18px;border:1px solid #e1cfb9;border-radius:14px;background:#f8efe3;color:#6b3a3e;font:13px "DM Sans",Arial,sans-serif}
+.draftCollectionSummary strong{font-weight:700;color:#64232d}
+.draftCollectionList{display:grid;gap:14px}
+.draftCollectionCard{display:grid;grid-template-columns:132px minmax(0,1fr);gap:18px;align-items:center;padding:17px;border:1px solid #e1cfb9;border-radius:17px;background:#f8efe3;box-shadow:0 5px 15px rgba(86,55,38,.07)}
+.draftCollectionPreview{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;aspect-ratio:1}
+.draftCollectionThumb{display:grid;place-items:center;overflow:hidden;min-width:0;min-height:0;border-radius:7px;background:#ead9c7;color:#9b6d50;font-size:24px}
+.draftCollectionThumb img{width:100%;height:100%;object-fit:cover}
+.draftCollectionDetails{min-width:0}
+.draftCollectionTitle{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.draftCollectionTitle h2{margin:5px 0 0;color:var(--wineDark);font:600 20px "Lora",Georgia,serif;overflow-wrap:anywhere}
+.draftCollectionDetails>p{margin:10px 0 13px;color:var(--muted);font:13px "DM Sans",Arial,sans-serif}
+.draftCollectionFooter{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:11px;border-top:1px solid rgba(120,82,58,.18)}
+.draftCollectionFooter small{color:var(--muted);font:11px "DM Sans",Arial,sans-serif}
+.draftCollectionFooter button{border:0;background:transparent;color:var(--wine);font:700 13px "DM Sans",Arial,sans-serif;cursor:pointer;white-space:nowrap}
+@media(min-width:901px){.refTopNav{gap:3px}.refTopNav button{padding-left:13px;padding-right:13px;font-size:15px}}
+@media(max-width:700px){.reviewBar{align-items:flex-start;gap:10px;flex-direction:column}.reviewBulkActions{width:100%;justify-content:space-between}.draftCollectionCard{grid-template-columns:88px minmax(0,1fr);gap:12px;padding:12px}.draftCollectionTitle h2{font-size:16px}.draftCollectionDetails>p{font-size:11px}.draftCollectionFooter small{font-size:9px}.draftCollectionFooter button{font-size:11px}.draftCollectionSummary{padding:11px 13px}.refTopNav{gap:2px}.refTopNav button{padding:9px 8px;gap:4px;font-size:12px}.refTopNav button span{font-size:20px}}
