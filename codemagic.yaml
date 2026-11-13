@@ -9,12 +9,63 @@ workflows:
     scripts:
       - name: Install dependencies
         script: npm install
+      - name: Verify remote website configuration
+        script: |
+          node -e "const c=require('./capacitor.config.json'); if(c.server?.url !== 'https://pinora-six.vercel.app') { console.error('PINVORA must load the stable production website URL'); process.exit(1); } console.log('Remote website:', c.server.url)"
       - name: Build the web app
         script: npm run build
       - name: Create Android project
         script: npx cap add android
       - name: Sync Capacitor
         script: npx cap sync android
+      - name: Configure RASI-style live website app
+        script: |
+          set -eu
+          APP_DIR="android/app/src/main/java/com/clevercreations/pinvora"
+          mkdir -p "$APP_DIR"
+          cat > "$APP_DIR/MainActivity.java" <<'JAVA'
+          package com.clevercreations.pinvora;
+
+          import android.app.Activity;
+          import android.os.Bundle;
+          import android.webkit.WebSettings;
+          import android.webkit.WebView;
+          import android.webkit.WebViewClient;
+
+          public class MainActivity extends Activity {
+              private WebView webView;
+
+              @Override
+              public void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+                  webView = new WebView(this);
+                  setContentView(webView);
+                  WebSettings settings = webView.getSettings();
+                  settings.setJavaScriptEnabled(true);
+                  settings.setDomStorageEnabled(true);
+                  settings.setDatabaseEnabled(true);
+                  settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+                  settings.setMediaPlaybackRequiresUserGesture(false);
+                  webView.setWebViewClient(new WebViewClient());
+                  webView.loadUrl("https://pinora-six.vercel.app/?pinvoraapp=1");
+              }
+
+              @Override
+              public void onBackPressed() {
+                  if (webView != null && webView.canGoBack()) {
+                      webView.goBack();
+                  } else {
+                      super.onBackPressed();
+                  }
+              }
+          }
+          JAVA
+          grep -q 'android.permission.INTERNET' android/app/src/main/AndroidManifest.xml
+      - name: Verify live website app configuration
+        script: |
+          grep -q 'https://pinora-six.vercel.app/?pinvoraapp=1' android/app/src/main/java/com/clevercreations/pinvora/MainActivity.java
+          grep -q 'android.permission.INTERNET' android/app/src/main/AndroidManifest.xml
+          echo "Live website URL and internet permission verified"
       - name: Set Android SDK location
         script: echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
       - name: Apply PINVORA launcher icon
@@ -35,5 +86,7 @@ workflows:
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
+          test -s app/build/outputs/apk/debug/app-debug.apk
+          echo "APK artifact verified"
     artifacts:
       - android/app/build/outputs/apk/debug/app-debug.apk
