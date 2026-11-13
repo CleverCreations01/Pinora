@@ -601,3 +601,9 @@ body{background:#f2e6d7!important}
 .amazonImportCard .helperText{line-height:1.55}
 
 .amazonIdentityRow{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:14px 0;padding:15px 16px;background:#fffaf3;border:1px solid var(--line);border-radius:13px}.amazonIdentityRow>div{display:flex;flex-direction:column;gap:5px;min-width:0}.amazonIdentityRow b{color:var(--wineDark);font:600 14px "DM Sans",Arial,sans-serif}.amazonIdentityRow small{color:var(--muted);font:12px "DM Sans",Arial,sans-serif;overflow-wrap:anywhere}.amazonIdentityRow button{flex-shrink:0}@media(max-width:520px){.amazonIdentityRow{align-items:flex-start;flex-direction:column}.amazonIdentityRow button{width:100%}}
+
+/* Reliable touch and keyboard selection for campaign controls */
+.typeChoices button,.countChoices button{position:relative;z-index:2;pointer-events:auto;touch-action:manipulation;cursor:pointer;}
+.countChoices{grid-template-columns:repeat(3,minmax(0,1fr));}
+.typeChoices button:focus-visible,.countChoices button:focus-visible{outline:3px solid #a66a62;outline-offset:3px;}
+.typeChoices button[aria-pressed="true"],.countChoices button[aria-pressed="true"]{background:var(--wine);border:2px solid var(--wine);color:#fff3e6;box-shadow:0 2px 0 rgba(75,23,32,.18);}
