@@ -12,6 +12,19 @@ export default async function handler(req, res) {
   res.setHeader("Referrer-Policy", "no-referrer");
   if (req.method !== "GET") return res.status(405).send("Method not allowed");
   const { code, state, error } = req.query;
+  const { PINTEREST_REDIRECT_URI } = process.env;
+  if (PINTEREST_REDIRECT_URI) {
+    const canonical = new URL(PINTEREST_REDIRECT_URI).origin;
+    const requestHost = req.headers["x-forwarded-host"] || req.headers.host || "";
+    if (requestHost && requestHost !== new URL(canonical).host) {
+      const target = new URL("/api/pinterest/callback", canonical);
+      for (const key of ["code", "state", "error", "error_description"]) {
+        const value = req.query[key];
+        if (typeof value === "string") target.searchParams.set(key, value);
+      }
+      return res.redirect(302, target.toString());
+    }
+  }
   const savedState = readCookie(req, "pinterest_oauth_state");
   const sessionId = readPinterestSession(req);
   const environment = readCookie(req, "pinterest_oauth_environment") === "production" ? "production" : "sandbox";
@@ -25,7 +38,7 @@ export default async function handler(req, res) {
   if (!sessionId || typeof code !== "string" || typeof state !== "string" || !savedState || state.length !== savedState.length || !timingSafeEqual(Buffer.from(state), Buffer.from(savedState))) {
     return res.redirect(302, `/?pinterest=error&environment=${environment}&reason=state_check_failed`);
   }
-  const { PINTEREST_APP_ID, PINTEREST_APP_SECRET, PINTEREST_REDIRECT_URI } = process.env;
+  const { PINTEREST_APP_ID, PINTEREST_APP_SECRET } = process.env;
   if (!PINTEREST_APP_ID || !PINTEREST_APP_SECRET || !PINTEREST_REDIRECT_URI) return res.redirect(302, `/?pinterest=error&environment=${environment}&reason=server_configuration_incomplete`);
   try {
     const base = environment === "sandbox" ? "https://api-sandbox.pinterest.com" : "https://api.pinterest.com";
