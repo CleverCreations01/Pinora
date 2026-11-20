@@ -12,6 +12,12 @@ export default async function handler(req, res) {
   }
 
   const environment = req.query.environment === "production" ? "production" : "sandbox";
+  // OAuth cookies must be created on the exact host registered with Pinterest.
+  const canonical = new URL(PINTEREST_REDIRECT_URI).origin;
+  const requestHost = req.headers["x-forwarded-host"] || req.headers.host || "";
+  if (requestHost && requestHost !== new URL(canonical).host) {
+    return res.redirect(302, `${canonical}/api/pinterest/auth?environment=${environment}`);
+  }
   const state = randomBytes(32).toString("hex");
   const session = randomBytes(32).toString("hex");
   const secure = req.headers["x-forwarded-proto"] === "https" || !String(req.headers.host || "").includes("localhost");
