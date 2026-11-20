@@ -2,6 +2,8 @@ import { put } from "@vercel/blob";
 import { randomUUID } from "node:crypto";
 import { readPinterestSession } from "./_storage.js";
 
+export const config = { api: { bodyParser: { sizeLimit: "10mb" } } };
+
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   res.setHeader("X-Content-Type-Options", "nosniff");
